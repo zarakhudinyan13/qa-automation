@@ -1,0 +1,27 @@
+{
+  "name": "qa-automation",
+  "version": "1.0.0",
+  "description": "Playwright automation course project for automationexercise.com",
+  "main": "index.js",
+  "scripts": {
+    "test": "playwright test",
+    "test:ui": "playwright test tests/ui",
+    "test:api": "playwright test tests/api",
+    "test:auth": "playwright test tests/auth",
+    "test:headed": "playwright test --headed",
+    "test:debug": "playwright test --debug",
+    "report": "playwright show-report",
+    "auth:setup": "playwright test tests/auth/auth.setup.js"
+  },
+  "keywords": ["playwright", "automation", "testing", "pom"],
+  "author": "",
+  "license": "ISC",
+  "type": "commonjs",
+  "devDependencies": {
+    "@playwright/test": "^1.62.1",
+    "@types/node": "^26.1.2"
+  },
+  "dependencies": {
+    "dotenv": "^17.4.2"
+  }
+}

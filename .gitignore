@@ -1,0 +1,16 @@
+
+# Playwright
+node_modules/
+/test-results/
+/playwright-report/
+/blob-report/
+/playwright/.cache/
+/auth/*.json
+
+# Environment & secrets
+.env
+.env.local
+
+# OS
+.DS_Store
+Thumbs.db
