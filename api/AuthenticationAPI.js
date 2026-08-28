@@ -8,12 +8,33 @@ export class AuthenticationAPI extends BaseAPI {
     return { response, body: await this.parseJson(response) };
   }
 
-  async uiLogin(email, password) {
+  /**
+   * Logs in via the UI login endpoint and returns Playwright storage state.
+   * Use this to reuse authenticated sessions across tests without UI login.
+   */
+  async apiLogin(email, password) {
+    const loginPageResponse = await this.request.get(`${this.baseUrl}/login`);
+    const html = await loginPageResponse.text();
+    const csrfMatch = html.match(/name="csrfmiddlewaretoken" value="([^"]+)"/);
+    const csrfToken = csrfMatch?.[1];
+
+    if (!csrfToken) {
+      throw new Error('CSRF token not found on login page');
+    }
+
     const response = await this.request.post(`${this.baseUrl}/login`, {
-      form: { email, password },
+      form: {
+        email,
+        password,
+        csrfmiddlewaretoken: csrfToken,
+      },
+      headers: {
+        Referer: `${this.baseUrl}/login`,
+      },
     });
+
     const storageState = await this.request.storageState();
-    return { response, cookies: storageState.cookies };
+    return { response, storageState };
   }
 
   async createAccount(userData) {

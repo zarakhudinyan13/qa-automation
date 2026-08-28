@@ -53,4 +53,17 @@ test.describe('Authentication API', () => {
     expect(body.user).toBeDefined();
     expect(body.user.email).toBe(email);
   });
+
+  test('apiLogin returns storage state with session cookies', async ({ authAPI }) => {
+    const { email, password } = getEnvCredentials();
+    const { response, storageState } = await authAPI.apiLogin(email, password);
+
+    expect(response.ok()).toBeTruthy();
+    expect(storageState).toBeDefined();
+    expect(Array.isArray(storageState.cookies)).toBeTruthy();
+    expect(storageState.cookies.length).toBeGreaterThan(0);
+
+    const sessionCookie = storageState.cookies.find((c) => c.name === 'sessionid');
+    expect(sessionCookie).toBeDefined();
+  });
 });

@@ -1,20 +1,21 @@
-import { test as setup, expect } from '@playwright/test';
-import { LoginPage } from '../../pages/LoginPage.js';
+import { test as setup } from '@playwright/test';
+import { AuthenticationAPI } from '../../api/AuthenticationAPI.js';
 import { getEnvCredentials } from '../../utils/helpers.js';
+import fs from 'fs';
 import path from 'path';
 
 const authFile = path.join(__dirname, '../../auth/user.json');
 
-setup('authenticate registered user', async ({ page }) => {
-  const { email, password, userName } = getEnvCredentials();
-  const loginPage = new LoginPage(page);
+setup('authenticate registered user', async ({ request }) => {
+  const { email, password } = getEnvCredentials();
+  const authAPI = new AuthenticationAPI(request);
 
-  await loginPage.navigateTo('login');
-  await loginPage.login(email, password);
+  const { response, storageState } = await authAPI.apiLogin(email, password);
 
-  await expect(page.getByText(/Logged in as/i)).toBeVisible({
-    timeout: 15_000,
-  });
+  if (!response.ok()) {
+    throw new Error(`API login failed with status ${response.status()}`);
+  }
 
-  await page.context().storageState({ path: authFile });
+  fs.mkdirSync(path.dirname(authFile), { recursive: true });
+  fs.writeFileSync(authFile, JSON.stringify(storageState, null, 2));
 });
