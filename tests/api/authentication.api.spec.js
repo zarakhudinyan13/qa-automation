@@ -66,4 +66,18 @@ test.describe('Authentication API', () => {
     const sessionCookie = storageState.cookies.find((c) => c.name === 'sessionid');
     expect(sessionCookie).toBeDefined();
   });
+
+  test('apiSignup creates user, logs in, and returns storage state', async ({ authAPI }) => {
+    const { user, createBody, loginResponse, storageState } = await authAPI.apiSignup();
+
+    expect(createBody.responseCode).toBe(API_CODES.created);
+    expect(createBody.message).toBe('User created!');
+    expect(user.email).toContain('@automation.test');
+    expect(loginResponse.ok()).toBeTruthy();
+    expect(storageState.cookies.find((c) => c.name === 'sessionid')).toBeDefined();
+
+    const { body: deleteBody } = await authAPI.deleteAccount(user.email, user.password);
+    expect(deleteBody.responseCode).toBe(API_CODES.ok);
+    expect(deleteBody.message).toBe('Account deleted!');
+  });
 });
