@@ -1,3 +1,9 @@
+/**
+ * SIGNUP UI FLOW — verifies the registration FORMS work end-to-end.
+ * For creating users as a precondition in other UI tests, use:
+ *   AuthenticationAPI.apiSignup() + createUserSession() / authenticatedPage
+ *   (see fixtures/auth.fixtures.js and tests/examples/multi-user-contexts.spec.js)
+ */
 import { test, expect } from '../../fixtures/test.fixtures.js';
 import { generateUser } from '../../utils/dataGenerator.js';
 import { getEnvCredentials } from '../../utils/helpers.js';

@@ -1,5 +1,8 @@
+/**
+ * Guest (not logged in) home page tests.
+ * Logout lives in tests/auth/authenticated.spec.js — uses authenticatedPage (API session).
+ */
 import { test, expect } from '../../fixtures/test.fixtures.js';
-import { getEnvCredentials } from '../../utils/helpers.js';
 import { generateUniqueEmail } from '../../utils/dataGenerator.js';
 
 test.describe('Home Page', () => {
@@ -34,18 +37,5 @@ test.describe('Home Page', () => {
     await expect(homePage.subscriptionHeading).toBeVisible();
     await homePage.clickScrollUp();
     await expect(homePage.heroText).toBeVisible();
-  });
-});
-
-test.describe('Logout', () => {
-  test('logged in user can logout', async ({ loginPage, header, page }) => {
-    const { email, password } = getEnvCredentials();
-
-    await loginPage.navigateTo('login');
-    await loginPage.login(email, password);
-    await header.logout();
-
-    await expect(header.signupLoginLink).toBeVisible();
-    await expect(page).toHaveURL(/login/);
   });
 });

@@ -1,3 +1,12 @@
+/**
+ * SETUP PROJECT — runs once before chromium-auth tests.
+ *
+ * Creates a SHARED session for the registered .env user:
+ *   AuthenticationAPI.apiLogin(email, password)
+ *   → storageState written to auth/user.json
+ *
+ * UI tests then open authenticatedPage with those cookies — no LoginPage.login().
+ */
 import { test as setup } from '@playwright/test';
 import { AuthenticationAPI } from '../../api/AuthenticationAPI.js';
 import { getEnvCredentials } from '../../utils/helpers.js';
@@ -6,7 +15,7 @@ import path from 'path';
 
 const authFile = path.join(__dirname, '../../auth/user.json');
 
-setup('authenticate registered user', async ({ request }) => {
+setup('authenticate registered user via API (shared session)', async ({ request }) => {
   const { email, password } = getEnvCredentials();
   const authAPI = new AuthenticationAPI(request);
 

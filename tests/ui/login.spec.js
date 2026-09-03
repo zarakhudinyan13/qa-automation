@@ -1,14 +1,23 @@
+/**
+ * LOGIN FORM UI TESTS (the ONLY place UI login is intentional)
+ * -----------------------------------------------------------
+ * These tests VERIFY the login page works (valid / invalid credentials, fields).
+ *
+ * For every other "user is logged in" UI scenario:
+ *   → use fixtures/auth.fixtures.js (authenticatedPage)
+ *   → session from AuthenticationAPI.apiLogin / apiSignup — NOT LoginPage.login()
+ */
 import { test, expect } from '../../fixtures/test.fixtures.js';
 import { getEnvCredentials } from '../../utils/helpers.js';
 import testData from '../../data/testData.js';
 
-test.describe('Login - UI', () => {
+test.describe('Login form - UI only', () => {
   test.beforeEach(async ({ loginPage }) => {
     await loginPage.navigateTo('login');
   });
 
-  test('registered user can login successfully', async ({ loginPage, header, page }) => {
-    const { email, password, userName } = getEnvCredentials();
+  test('registered user can login successfully via UI form', async ({ loginPage, header, page }) => {
+    const { email, password } = getEnvCredentials();
 
     await loginPage.assertLoginFormVisible();
     await loginPage.login(email, password);

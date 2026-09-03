@@ -41,6 +41,10 @@ jobs:
         run: npx playwright test --project=setup --project=chromium-auth
         if: env.EMAIL != ''
 
+      - name: Run multi-user context examples
+        run: npx playwright test --project=examples
+        if: env.EMAIL != ''
+
       - uses: actions/upload-artifact@v4
         if: always()
         with:

@@ -5,13 +5,14 @@
   "main": "index.js",
   "scripts": {
     "test": "playwright test",
-    "test:ui": "playwright test tests/ui",
-    "test:api": "playwright test tests/api",
-    "test:auth": "playwright test tests/auth",
+    "test:ui": "playwright test --project=chromium",
+    "test:api": "playwright test --project=api",
+    "test:auth": "playwright test --project=setup --project=chromium-auth",
+    "test:examples": "playwright test --project=examples",
     "test:headed": "playwright test --headed",
     "test:debug": "playwright test --debug",
     "report": "playwright show-report",
-    "auth:setup": "playwright test tests/auth/auth.setup.js"
+    "auth:setup": "playwright test --project=setup"
   },
   "keywords": ["playwright", "automation", "testing", "pom"],
   "author": "",

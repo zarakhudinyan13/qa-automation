@@ -1,28 +1,58 @@
-import { test, expect } from '@playwright/test';
+/**
+ * AUTHENTICATED UI TESTS
+ * ----------------------
+ * These tests never open the Signup/Login form.
+ * Session is prepared by:
+ *   1) tests/auth/auth.setup.js  → AuthenticationAPI.apiLogin()
+ *   2) storage saved to auth/user.json
+ *   3) fixtures/auth.fixtures.js → authenticatedPage (browser context + cookies)
+ *
+ * Use: import { test, expect } from '../../fixtures/auth.fixtures.js'
+ */
+import { test, expect } from '../../fixtures/auth.fixtures.js';
 
-test.describe('Authenticated User Flows', () => {
-  test('authenticated user sees logged in header', async ({ page }) => {
-    await page.goto('/', { waitUntil: 'domcontentloaded' });
-    await expect(page.getByText(/Logged in as/i)).toBeVisible();
+test.describe('Authenticated UI (shared API session)', () => {
+  test('authenticatedPage lands already logged in', async ({ authenticatedPage, header }) => {
+    await authenticatedPage.goto('/', { waitUntil: 'domcontentloaded' });
+
+    await expect(header.loggedInIndicator()).toBeVisible();
+    await expect(header.logoutLink).toBeVisible();
   });
 
-  test('authenticated user can add product to cart and view cart', async ({ page }) => {
-    await page.goto('/products', { waitUntil: 'domcontentloaded' });
+  test('authenticated user can open products and add to cart', async ({
+    authenticatedPage,
+    productsPage,
+    cartPage,
+  }) => {
+    await productsPage.navigateTo('products');
+    await productsPage.addProductToCart('1');
+    await productsPage.goToCartFromModal();
 
-    const firstProduct = page.locator('.product-image-wrapper').first();
-    await firstProduct.hover();
-    await page.locator('a.add-to-cart[data-product-id="1"]').first().click();
-    await page.getByRole('link', { name: 'View Cart' }).click();
-
-    await expect(page.getByText('Shopping Cart')).toBeVisible();
-    await expect(page.locator('#cart_info_table')).toBeVisible();
+    await cartPage.verifyCartPageLoaded();
+    await expect(await cartPage.getCartItemCount()).toBeGreaterThan(0);
+    await expect(authenticatedPage.locator('#cart_info_table')).toBeVisible();
   });
 
-  test('authenticated user can navigate to products from home', async ({ page }) => {
-    await page.goto('/', { waitUntil: 'domcontentloaded' });
-    await page.getByRole('link', { name: 'Products' }).click();
+  test('authenticated user navigates home → products via header', async ({
+    homePage,
+    header,
+    productsPage,
+  }) => {
+    await homePage.navigateTo('');
+    await header.goToProducts();
+    await productsPage.verifyProductsPageLoaded();
+  });
 
-    await expect(page).toHaveURL(/products/);
-    await expect(page.getByRole('heading', { name: 'All Products' })).toBeVisible();
+  test('authenticated user can logout (session ends)', async ({
+    authenticatedPage,
+    header,
+  }) => {
+    await authenticatedPage.goto('/', { waitUntil: 'domcontentloaded' });
+    await expect(header.loggedInIndicator()).toBeVisible();
+
+    await header.logout();
+
+    await expect(header.signupLoginLink).toBeVisible();
+    await expect(authenticatedPage).toHaveURL(/login/);
   });
 });
