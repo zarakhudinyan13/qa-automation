@@ -120,6 +120,37 @@ Local CI parity:
 npm run test:ci
 ```
 
+## npm scripts
+
+| Script | What it runs |
+|--------|----------------|
+| `npm test` / `npm run test:all` | Full suite (all projects) |
+| `npm run test:ui` | Guest UI (`tests/ui`) |
+| `npm run test:ui:login` | Login form UI only |
+| `npm run test:ui:home` | Home UI only |
+| `npm run test:ui:products` | Products UI only |
+| `npm run test:ui:cart` | Cart UI only |
+| `npm run test:ui:contact` | Contact UI only |
+| `npm run test:ui:signup` | Signup UI only |
+| `npm run test:ui:headed` | Guest UI headed |
+| `npm run test:ui:debug` | Guest UI debug |
+| `npm run test:api` | All API tests |
+| `npm run test:api:auth` | Auth API only |
+| `npm run test:api:products` | Products API only |
+| `npm run test:api:brands` | Brands API only |
+| `npm run test:auth` | Shared-session UI (`authenticatedPage`) |
+| `npm run test:auth:headed` | Auth UI headed |
+| `npm run test:examples` | Multi-user browser/context lesson |
+| `npm run test:ci` | Bootstrap user + full suite (like GitHub Actions) |
+| `npm run test:ci:ui` | Bootstrap + guest UI |
+| `npm run test:ci:api` | Bootstrap + API |
+| `npm run test:ci:auth` | Bootstrap + auth UI |
+| `npm run test:ci:examples` | Bootstrap + examples |
+| `npm run bootstrap` | Create/write `.env` credentials only |
+| `npm run auth:setup` | `apiLogin` → `auth/user.json` |
+| `npm run report` | Open HTML report |
+| `npm run install:browsers` | Install Chromium |
+
 ## Adding New Tests
 
 - **Guest UI** → `tests/ui/` + `test.fixtures.js`  

@@ -4,19 +4,51 @@
   "description": "Playwright automation course project for automationexercise.com",
   "main": "index.js",
   "scripts": {
+    "bootstrap": "node scripts/ci-bootstrap-user.js",
+    "auth:setup": "playwright test --project=setup",
+
     "test": "playwright test",
+    "test:all": "playwright test",
+
     "test:ui": "playwright test --project=chromium",
+    "test:ui:headed": "playwright test --project=chromium --headed",
+    "test:ui:debug": "playwright test --project=chromium --debug",
+    "test:ui:login": "playwright test tests/ui/login.spec.js --project=chromium",
+    "test:ui:home": "playwright test tests/ui/home.spec.js --project=chromium",
+    "test:ui:products": "playwright test tests/ui/products.spec.js --project=chromium",
+    "test:ui:cart": "playwright test tests/ui/cart.spec.js --project=chromium",
+    "test:ui:contact": "playwright test tests/ui/contact.spec.js --project=chromium",
+    "test:ui:signup": "playwright test tests/ui/signup.spec.js --project=chromium",
+
     "test:api": "playwright test --project=api",
+    "test:api:auth": "playwright test tests/api/authentication.api.spec.js --project=api",
+    "test:api:products": "playwright test tests/api/products.api.spec.js --project=api",
+    "test:api:brands": "playwright test tests/api/brands.api.spec.js --project=api",
+
     "test:auth": "playwright test --project=setup --project=chromium-auth",
+    "test:auth:headed": "playwright test --project=setup --project=chromium-auth --headed",
+
     "test:examples": "playwright test --project=examples",
+    "test:examples:headed": "playwright test --project=examples --headed",
+
     "test:ci": "node scripts/ci-bootstrap-user.js && playwright test --workers=2",
+    "test:ci:ui": "node scripts/ci-bootstrap-user.js && playwright test --project=chromium --workers=2",
+    "test:ci:api": "node scripts/ci-bootstrap-user.js && playwright test --project=api --workers=2",
+    "test:ci:auth": "node scripts/ci-bootstrap-user.js && playwright test --project=setup --project=chromium-auth --workers=2",
+    "test:ci:examples": "node scripts/ci-bootstrap-user.js && playwright test --project=examples --workers=2",
+
     "test:headed": "playwright test --headed",
     "test:debug": "playwright test --debug",
+
     "report": "playwright show-report",
-    "auth:setup": "playwright test --project=setup",
-    "bootstrap": "node scripts/ci-bootstrap-user.js"
+    "install:browsers": "playwright install chromium"
   },
-  "keywords": ["playwright", "automation", "testing", "pom"],
+  "keywords": [
+    "playwright",
+    "automation",
+    "testing",
+    "pom"
+  ],
   "author": "",
   "license": "ISC",
   "type": "commonjs",
