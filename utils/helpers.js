@@ -5,10 +5,11 @@ export function getEnvCredentials() {
   const email = process.env.EMAIL;
   const password = process.env.PASSWORD;
   const userName = process.env.USER_NAME;
-  
 
   if (!email || !password) {
-    throw new Error('EMAIL and PASSWORD must be set in .env file. Copy .env.example and fill in your credentials.');
+    throw new Error(
+      'EMAIL and PASSWORD must be set. Copy .env.example to .env, or run: node scripts/ci-bootstrap-user.js',
+    );
   }
 
   return { email, password, userName: userName || 'Test User' };

@@ -22,10 +22,9 @@ export default defineConfig({
   forbidOnly: !!process.env.CI,
   retries: process.env.CI ? 2 : 0,
   workers: process.env.CI ? 2 : 3,
-  reporter: [
-    ['html', { open: 'never' }],
-    ['list'],
-  ],
+  reporter: process.env.CI
+    ? [['html', { open: 'never' }], ['list'], ['github']]
+    : [['html', { open: 'never' }], ['list']],
 
   use: {
     baseURL: process.env.BASE_URL || 'https://automationexercise.com',

@@ -9,10 +9,12 @@
     "test:api": "playwright test --project=api",
     "test:auth": "playwright test --project=setup --project=chromium-auth",
     "test:examples": "playwright test --project=examples",
+    "test:ci": "node scripts/ci-bootstrap-user.js && playwright test --workers=2",
     "test:headed": "playwright test --headed",
     "test:debug": "playwright test --debug",
     "report": "playwright show-report",
-    "auth:setup": "playwright test --project=setup"
+    "auth:setup": "playwright test --project=setup",
+    "bootstrap": "node scripts/ci-bootstrap-user.js"
   },
   "keywords": ["playwright", "automation", "testing", "pom"],
   "author": "",

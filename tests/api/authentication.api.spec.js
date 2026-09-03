@@ -25,10 +25,9 @@ test.describe('Authentication API', () => {
   });
 
   test('POST verifyLogin without email returns 400', async ({ authAPI }) => {
-    const { password } = getEnvCredentials();
     const response = await authAPI.request.post(
       `${authAPI.baseUrl}/api/verifyLogin`,
-      { form: { password } },
+      { form: { password: 'AnyPassword123!' } },
     );
     const body = await response.json();
 

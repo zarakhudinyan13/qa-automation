@@ -13,9 +13,11 @@ jobs:
 
     env:
       BASE_URL: https://automationexercise.com
+      # Optional: if set in repo secrets, bootstrap reuses them; otherwise creates a user
       EMAIL: ${{ secrets.TEST_EMAIL }}
       PASSWORD: ${{ secrets.TEST_PASSWORD }}
       USER_NAME: ${{ secrets.TEST_USER_NAME }}
+      CI: true
 
     steps:
       - uses: actions/checkout@v4
@@ -30,20 +32,11 @@ jobs:
       - name: Install Playwright Browsers
         run: npx playwright install --with-deps chromium
 
-      - name: Run API tests
-        run: npx playwright test --project=api
+      - name: Bootstrap test credentials
+        run: node scripts/ci-bootstrap-user.js
 
-      - name: Run UI tests
-        run: npx playwright test --project=chromium
-        if: env.EMAIL != ''
-
-      - name: Run authenticated tests
-        run: npx playwright test --project=setup --project=chromium-auth
-        if: env.EMAIL != ''
-
-      - name: Run multi-user context examples
-        run: npx playwright test --project=examples
-        if: env.EMAIL != ''
+      - name: Run full Playwright suite
+        run: npx playwright test --workers=2
 
       - uses: actions/upload-artifact@v4
         if: always()
@@ -51,3 +44,10 @@ jobs:
           name: playwright-report
           path: playwright-report/
           retention-days: 30
+
+      - uses: actions/upload-artifact@v4
+        if: failure()
+        with:
+          name: test-results
+          path: test-results/
+          retention-days: 7

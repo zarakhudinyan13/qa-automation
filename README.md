@@ -99,13 +99,26 @@ npm run test:examples   # browser/context multi-user lesson
 | 15 | Debugging & reporting | config trace / screenshot / video |
 | 16 | CI/CD | `.github/workflows/playwright.yml` |
 
-## GitHub Actions Secrets
+## CI / GitHub Actions
+
+The workflow **does not require secrets** to pass.
+
+1. `node scripts/ci-bootstrap-user.js` — uses `TEST_*` secrets if set, otherwise creates a fresh user via API and writes `.env`
+2. `npx playwright test` — runs **all** projects (api, ui, setup, auth, examples)
+
+Optional secrets (stable registered user):
 
 | Secret | Description |
 |--------|-------------|
 | `TEST_EMAIL` | Registered user email |
 | `TEST_PASSWORD` | Registered user password |
 | `TEST_USER_NAME` | Display name after login |
+
+Local CI parity:
+
+```bash
+npm run test:ci
+```
 
 ## Adding New Tests
 
