@@ -1,3 +1,4 @@
+
 export function generateUniqueEmail(prefix = 'qa.student') {
   const timestamp = Date.now();
   return `${prefix}.${timestamp}@automation.test`;

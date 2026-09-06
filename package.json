@@ -49,7 +49,7 @@
     "testing",
     "pom"
   ],
-  "author": "",
+  "author": "Zara Khudinyan",
   "license": "ISC",
   "type": "commonjs",
   "devDependencies": {
