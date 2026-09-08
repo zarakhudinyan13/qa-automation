@@ -1,5 +1,5 @@
 
-export function generateUniqueEmail(prefix = 'qa.student') {
+export function generateUniqueEmail(prefix = 'qa.user') {
   const timestamp = Date.now();
   return `${prefix}.${timestamp}@automation.test`;
 }
@@ -15,7 +15,7 @@ export function generateUser(overrides = {}) {
     birthMonth: '5',
     birthYear: '1990',
     firstName: 'QA',
-    lastName: `Student${uniqueId}`,
+    lastName: `User${uniqueId}`,
     company: 'Automation Inc',
     address1: '123 Test Street',
     address2: 'Suite 100',

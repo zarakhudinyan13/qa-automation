@@ -1,7 +1,3 @@
-/**
- * Guest (not logged in) home page tests.
- * Logout lives in tests/auth/authenticated.spec.js — uses authenticatedPage (API session).
- */
 import { test, expect } from '../../fixtures/test.fixtures.js';
 import { generateUniqueEmail } from '../../utils/dataGenerator.js';
 

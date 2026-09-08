@@ -23,10 +23,6 @@ export class AuthenticationAPI extends BaseAPI {
     return { response, body: await this.parseJson(response) };
   }
 
-  /**
-   * Logs in via the UI login endpoint and returns Playwright storage state.
-   * Use this to reuse authenticated sessions across tests without UI login.
-   */
   async apiLogin(email, password) {
     const csrfToken = await this._getCsrfToken('/login');
 
@@ -45,10 +41,6 @@ export class AuthenticationAPI extends BaseAPI {
     return { response, storageState };
   }
 
-  /**
-   * Full reusable signup: creates account via API, logs in, returns user + storage state.
-   * Pass overrides to generateUser() or a complete user object.
-   */
   async apiSignup(userOverrides = {}) {
     const user = generateUser(userOverrides);
     const payload = toApiUserPayload(user);
