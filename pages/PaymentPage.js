@@ -11,7 +11,7 @@ export class PaymentPage extends BasePage {
     this.expiryMonthInput = page.locator('[data-qa="expiry-month"], [name="expiry_month"]');
     this.expiryYearInput = page.locator('[data-qa="expiry-year"], [name="expiry_year"]');
     this.payButton = page.locator('[data-qa="pay-button"], #submit');
-    this.orderPlacedHeading = page.locator('[data-qa="order-placed"]').or(page.getByText('Order Placed!'));
+    this.orderPlacedHeading = page.locator('[data-qa="order-placed"]');
     this.orderSuccessMessage = page.getByText('Congratulations! Your order has been confirmed!');
   }
 
