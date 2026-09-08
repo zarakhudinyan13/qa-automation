@@ -8,9 +8,9 @@ dotenv.config({ path: path.resolve(__dirname, '.env') });
 /**
  * Projects map to HOW auth is used:
  *
- * setup          → apiLogin once → write auth/user.json (NO browser UI)
+ * setup          → setup keywords: apiLogin once → write auth/user.json (NO browser UI)
  * chromium       → guest UI tests (login FORM is the only place UI login is OK)
- * chromium-auth  → UI tests with shared session via authenticatedPage fixture
+ * chromium-auth  → UI tests with shared session via authenticatedPage + authKeywords
  * examples       → student demos: browser/context + 2 parallel users via apiSignup
  * api            → pure API specs
  */
@@ -49,7 +49,7 @@ export default defineConfig({
     {
       name: 'chromium-auth',
       use: { ...devices['Desktop Chrome'] },
-      testMatch: /tests\/auth\/authenticated\.spec\.js/,
+      testMatch: /tests\/auth\/.*\.spec\.js/,
       dependencies: ['setup'],
     },
     {

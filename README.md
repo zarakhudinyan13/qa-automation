@@ -11,7 +11,10 @@ qa-automation/
 ├── data/                   # Test data and constants
 ├── fixtures/
 │   ├── test.fixtures.js    # Guest pages (no session)
-│   └── auth.fixtures.js    # authenticatedPage + POM on API session
+│   └── auth.fixtures.js    # authenticatedPage + POM + authKeywords
+├── keywords/
+│   ├── auth.setup.keywords.js   # setup: apiLogin → auth/user.json
+│   └── authenticated.keywords.js # test: open home, verify session, cart, logout
 ├── pages/                  # Page Object Model
 ├── tests/
 │   ├── api/                # Pure API tests
@@ -31,7 +34,7 @@ qa-automation/
 |------|-----|--------|
 | Test the **login form** | UI only — `LoginPage.login()` | `fixtures/test.fixtures.js` |
 | Test the **signup forms** | UI only — `startSignup` + `SignupPage` | `fixtures/test.fixtures.js` |
-| UI test where user is **already logged in** | `apiLogin` / `apiSignup` → storage → `authenticatedPage` | `fixtures/auth.fixtures.js` |
+| UI test where user is **already logged in** | `apiLogin` / `apiSignup` → storage → `authenticatedPage` + `authKeywords` | `fixtures/auth.fixtures.js` |
 | **Two users** at once | One `browser`, two `context`s, each with its own storage | `utils/session.js` + `tests/examples/` |
 
 **Do not** call `LoginPage.login()` as a precondition for cart/home/authenticated flows.  
@@ -47,9 +50,9 @@ page      → one tab inside that context  (= authenticatedPage)
 
 ### Shared registered user (fast)
 
-1. `auth.setup.js` → `AuthenticationAPI.apiLogin(EMAIL, PASSWORD)`  
+1. Setup keyword `setupAuthenticatedSession()` in `auth.setup.js` → `AuthenticationAPI.apiLogin(EMAIL, PASSWORD)`  
 2. Saves `auth/user.json`  
-3. Auth fixtures open `authenticatedContext` + `authenticatedPage` with that file  
+3. Auth fixtures open `authenticatedContext` + `authenticatedPage` and bind **test keywords** (`authKeywords`)  
 
 ### Fresh user per test
 
@@ -95,7 +98,7 @@ npm run test:examples   # browser/context multi-user lesson
 | 10 | Page Object Model | `pages/` |
 | 11 | Test data & utilities | `data/`, `utils/` |
 | 12 | API testing | `api/`, `tests/api/` |
-| 13–14 | Auth, sessions, multi-user | `fixtures/auth.fixtures.js`, `tests/auth/`, `tests/examples/` |
+| 13–14 | Auth, sessions, multi-user | `keywords/`, `fixtures/auth.fixtures.js`, `tests/auth/`, `tests/examples/` |
 | 15 | Debugging & reporting | config trace / screenshot / video |
 | 16 | CI/CD | `.github/workflows/playwright.yml` |
 
@@ -154,6 +157,6 @@ npm run test:ci
 ## Adding New Tests
 
 - **Guest UI** → `tests/ui/` + `test.fixtures.js`  
-- **Logged-in UI** → `tests/auth/` + `auth.fixtures.js` (`authenticatedPage`)  
+- **Logged-in UI** → `tests/auth/` + `auth.fixtures.js` (`authenticatedPage`, `authKeywords`)  
 - **API** → `tests/api/` + `authAPI` / `productsAPI` fixtures  
 - **Multi-user** → `createUserSession(browser, request)` or copy the examples spec  

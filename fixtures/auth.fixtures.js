@@ -5,6 +5,7 @@ import { CartPage } from '../pages/CartPage.js';
 import { ProductDetailsPage } from '../pages/ProductDetailsPage.js';
 import { HeaderComponent } from '../pages/HeaderComponent.js';
 import { ContactPage } from '../pages/ContactPage.js';
+import { createAuthenticatedKeywords, setupAuthenticatedSession } from '../keywords/index.js';
 import {
   AUTH_FILE,
   BASE_URL,
@@ -21,6 +22,7 @@ import {
  * - UI login is only for tests that VERIFY the login form itself (tests/ui/login.spec.js).
  *
  * authenticatedPage = a Page inside a Context that already has shared session cookies.
+ * authKeywords      = test keywords bound to that page (setupPage, verifyLoggedIn, ...).
  */
 export const test = base.extend({
   /**
@@ -58,10 +60,33 @@ export const test = base.extend({
     await use(new HeaderComponent(authenticatedPage));
   },
 
+  /**
+   * Test keywords bound to the authenticated tab.
+   * Use these in tests/auth instead of repeating POM calls.
+   */
+  authKeywords: async ({ authenticatedPage, header, homePage, productsPage, cartPage }, use) => {
+    await use(
+      createAuthenticatedKeywords({
+        page: authenticatedPage,
+        header,
+        homePage,
+        productsPage,
+        cartPage,
+      }),
+    );
+  },
+
   /** Helper: fresh apiSignup user in their own browser context (isolated API + UI session) */
   createUserSession: async ({ browser }, use) => {
     await use((overrides) => createUserSession(browser, overrides));
   },
 });
 
-export { expect, BASE_URL, createUserSession, createAuthenticatedContext };
+export {
+  expect,
+  BASE_URL,
+  createUserSession,
+  createAuthenticatedContext,
+  createAuthenticatedKeywords,
+  setupAuthenticatedSession,
+};
