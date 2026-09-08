@@ -11,11 +11,11 @@ qa-automation/
 ├── data/                   # Test data and constants
 ├── fixtures/
 │   ├── test.fixtures.js    # Guest pages (no session)
-│   └── auth.fixtures.js    # authenticatedPage + POM on API session
-├── pages/                  # Page Object Model
+│   └── auth.fixtures.js    # authenticatedPage, freshSession, logged-in POM
+├── pages/                  # Page Object Model (includes Checkout + Payment)
 ├── tests/
 │   ├── api/                # Pure API tests
-│   ├── auth/               # Shared session UI (NO UI login)
+│   ├── auth/               # Logged-in UI via storageState (NO UI login)
 │   ├── examples/           # Student demos: browser / context / 2 users
 │   └── ui/                 # Guest UI + login/signup FORM checks
 ├── utils/
@@ -31,7 +31,8 @@ qa-automation/
 |------|-----|--------|
 | Test the **login form** | UI only — `LoginPage.login()` | `fixtures/test.fixtures.js` |
 | Test the **signup forms** | UI only — `startSignup` + `SignupPage` | `fixtures/test.fixtures.js` |
-| UI test where user is **already logged in** | `apiLogin` / `apiSignup` → storage → `authenticatedPage` | `fixtures/auth.fixtures.js` |
+| UI test where user is **already logged in** | `apiLogin` → `auth/user.json` → `authenticatedPage` | `fixtures/auth.fixtures.js` |
+| Logout, checkout, or **delete account** | Isolated `freshSession` (apiSignup + own cookies) | `fixtures/auth.fixtures.js` |
 | **Two users** at once | One `browser`, two `context`s, each with its own storage | `utils/session.js` + `tests/examples/` |
 
 **Do not** call `LoginPage.login()` as a precondition for cart/home/authenticated flows.  
@@ -49,9 +50,22 @@ page      → one tab inside that context  (= authenticatedPage)
 
 1. `auth.setup.js` → `AuthenticationAPI.apiLogin(EMAIL, PASSWORD)`  
 2. Saves `auth/user.json`  
-3. Auth fixtures open `authenticatedContext` + `authenticatedPage` with that file  
+3. `chromium-auth` project loads that file as Playwright `storageState`  
+4. Tests use `authenticatedPage` (alias of the already-logged-in `page`)
+
+Do **not** logout or delete this shared user — that invalidates `sessionid` for parallel tests.
 
 ### Fresh user per test
+
+Prefer the `freshSession` fixture (creates + logs in via API, then deletes the account):
+
+```js
+test('isolated user can checkout', async ({ freshSession }) => {
+  // freshSession.page is already logged in — bind POM: new CheckoutPage(freshSession.page)
+});
+```
+
+Or call the helper yourself:
 
 ```js
 const session = await createUserSession(browser); // isolated API + browser context
@@ -154,6 +168,6 @@ npm run test:ci
 ## Adding New Tests
 
 - **Guest UI** → `tests/ui/` + `test.fixtures.js`  
-- **Logged-in UI** → `tests/auth/` + `auth.fixtures.js` (`authenticatedPage`)  
+- **Logged-in UI** → `tests/auth/` + `auth.fixtures.js` (`authenticatedPage` or `freshSession`)  
 - **API** → `tests/api/` + `authAPI` / `productsAPI` fixtures  
 - **Multi-user** → `createUserSession(browser, request)` or copy the examples spec  

@@ -5,6 +5,8 @@ export const ROUTES = {
   products: '/products',
   cart: '/view_cart',
   contact: '/contact_us',
+  checkout: '/checkout',
+  payment: '/payment',
   testCases: '/test_cases',
 };
 

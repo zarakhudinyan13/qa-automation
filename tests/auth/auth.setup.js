@@ -25,6 +25,11 @@ setup('authenticate registered user via API (shared session)', async ({ request 
     throw new Error(`API login failed with status ${response.status()}`);
   }
 
+  const sessionCookie = storageState.cookies?.find((cookie) => cookie.name === 'sessionid');
+  if (!sessionCookie) {
+    throw new Error('API login did not return a sessionid cookie — cannot write authenticated storage state');
+  }
+
   fs.mkdirSync(path.dirname(authFile), { recursive: true });
   fs.writeFileSync(authFile, JSON.stringify(storageState, null, 2));
 });

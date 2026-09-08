@@ -52,7 +52,11 @@ export async function createUserSession(browser, userOverrides = {}) {
     page,
     authAPI,
     async cleanup() {
-      await authAPI.deleteAccount(user.email, user.password);
+      try {
+        await authAPI.deleteAccount(user.email, user.password);
+      } catch {
+        // Account may already be deleted (e.g. UI delete-account tests)
+      }
       await apiContext.dispose();
       await context.close();
     },
