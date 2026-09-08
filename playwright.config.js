@@ -5,15 +5,6 @@ import path from 'path';
 
 dotenv.config({ path: path.resolve(__dirname, '.env') });
 
-/**
- * Projects map to HOW auth is used:
- *
- * setup          → apiLogin once → write auth/user.json (NO browser UI)
- * chromium       → guest UI tests (login FORM is the only place UI login is OK)
- * chromium-auth  → UI tests with shared session via authenticatedPage fixture
- * examples       → student demos: browser/context + 2 parallel users via apiSignup
- * api            → pure API specs
- */
 export default defineConfig({
   testDir: './tests',
   timeout: 60 * 1000,
@@ -28,6 +19,7 @@ export default defineConfig({
 
   use: {
     baseURL: process.env.BASE_URL || 'https://automationexercise.com',
+    testIdAttribute: 'data-qa',
     headless: true,
     trace: 'on-first-retry',
     screenshot: 'only-on-failure',
@@ -49,18 +41,8 @@ export default defineConfig({
     {
       name: 'chromium-auth',
       use: { ...devices['Desktop Chrome'] },
-      testMatch: /tests\/auth\/authenticated\.spec\.js/,
+      testMatch: /tests\/auth\/.*\.spec\.js/,
       dependencies: ['setup'],
-    },
-    {
-      name: 'examples',
-      use: { ...devices['Desktop Chrome'] },
-      testMatch: /tests\/examples\/.*\.spec\.js/,
-    },
-    {
-      name: 'api',
-      use: { ...devices['Desktop Chrome'] },
-      testMatch: /tests\/api\/.*\.spec\.js/,
     },
   ],
 });

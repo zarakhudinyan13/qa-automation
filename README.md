@@ -1,159 +1,27 @@
-# QA Automation — Playwright Course Project
+# QA Automation
 
-Complete Playwright (JavaScript) automation framework for [Automation Exercise](https://automationexercise.com) — the practice site used throughout the 16-lesson course.
+Playwright tests for [Automation Exercise](https://automationexercise.com).
 
-## Project Structure
-
-```
-qa-automation/
-├── api/                    # Reusable API clients (apiLogin, apiSignup, ...)
-├── auth/                   # Shared storage state from setup (gitignored)
-├── data/                   # Test data and constants
-├── fixtures/
-│   ├── test.fixtures.js    # Guest pages (no session)
-│   └── auth.fixtures.js    # authenticatedPage + POM on API session
-├── pages/                  # Page Object Model
-├── tests/
-│   ├── api/                # Pure API tests
-│   ├── auth/               # Shared session UI (NO UI login)
-│   ├── examples/           # Student demos: browser / context / 2 users
-│   └── ui/                 # Guest UI + login/signup FORM checks
-├── utils/
-│   ├── session.js          # createAuthenticatedContext, createUserSession
-│   ├── dataGenerator.js
-│   └── helpers.js
-└── playwright.config.js
-```
-
-## Auth rule (read this first)
-
-| Goal | How | Import |
-|------|-----|--------|
-| Test the **login form** | UI only — `LoginPage.login()` | `fixtures/test.fixtures.js` |
-| Test the **signup forms** | UI only — `startSignup` + `SignupPage` | `fixtures/test.fixtures.js` |
-| UI test where user is **already logged in** | `apiLogin` / `apiSignup` → storage → `authenticatedPage` | `fixtures/auth.fixtures.js` |
-| **Two users** at once | One `browser`, two `context`s, each with its own storage | `utils/session.js` + `tests/examples/` |
-
-**Do not** call `LoginPage.login()` as a precondition for cart/home/authenticated flows.  
-Use API session + `authenticatedPage` instead.
-
-### Hierarchy (students)
-
-```
-browser   → one Chromium process
-context   → one user session (cookies) — isolated from other contexts
-page      → one tab inside that context  (= authenticatedPage)
-```
-
-### Shared registered user (fast)
-
-1. `auth.setup.js` → `AuthenticationAPI.apiLogin(EMAIL, PASSWORD)`  
-2. Saves `auth/user.json`  
-3. Auth fixtures open `authenticatedContext` + `authenticatedPage` with that file  
-
-### Fresh user per test
-
-```js
-const session = await createUserSession(browser); // isolated API + browser context
-// session.page is already logged in — bind POM: new HomePage(session.page)
-await session.cleanup(); // deleteAccount + close context
-```
-
-### Two users in parallel
-
-See `tests/examples/multi-user-contexts.spec.js`:
-
-1. `createAuthAPI()` twice (isolated API request contexts)  
-2. `apiSignup()` in `Promise.all`  
-3. `browser.newContext({ storageState })` twice  
-4. Act on both pages in parallel — cookies never mix  
-
-## Quick Start
+## Setup
 
 ```bash
 npm install
-npx playwright install
-cp .env.example .env   # set EMAIL, PASSWORD, USER_NAME
+npx playwright install chromium
+cp .env.example .env
+```
+
+Set `EMAIL`, `PASSWORD`, and `USER_NAME` in `.env` to a registered account.
+
+## Run tests
+
+```bash
 npm test
+npm run test:ui
+npm run test:auth
 ```
 
-```bash
-npm run test:ui         # guest UI + login/signup forms
-npm run test:api        # API only
-npm run test:auth       # setup + authenticatedPage UI
-npm run test:examples   # browser/context multi-user lesson
-```
+`test:auth` logs in through the API, writes `auth/user.json`, and opens `authenticatedPage` with that session.
 
-## Course Lesson Mapping
+## CI
 
-| Lesson | Topic | Project Location |
-|--------|-------|------------------|
-| 1–3 | Intro, setup, first test | `playwright.config.js`, `tests/ui/` |
-| 4–6 | Locators, elements, assertions | `pages/*.js` |
-| 7–8 | Dynamic content, advanced UI | `pages/ProductsPage.js` |
-| 9 | Forms | `pages/ContactPage.js`, `pages/SignupPage.js` |
-| 10 | Page Object Model | `pages/` |
-| 11 | Test data & utilities | `data/`, `utils/` |
-| 12 | API testing | `api/`, `tests/api/` |
-| 13–14 | Auth, sessions, multi-user | `fixtures/auth.fixtures.js`, `tests/auth/`, `tests/examples/` |
-| 15 | Debugging & reporting | config trace / screenshot / video |
-| 16 | CI/CD | `.github/workflows/playwright.yml` |
-
-## CI / GitHub Actions
-
-The workflow **does not require secrets** to pass.
-
-1. `node scripts/ci-bootstrap-user.js` — uses `TEST_*` secrets if set, otherwise creates a fresh user via API and writes `.env`
-2. `npx playwright test` — runs **all** projects (api, ui, setup, auth, examples)
-
-Optional secrets (stable registered user):
-
-| Secret | Description |
-|--------|-------------|
-| `TEST_EMAIL` | Registered user email |
-| `TEST_PASSWORD` | Registered user password |
-| `TEST_USER_NAME` | Display name after login |
-
-Local CI parity:
-
-```bash
-npm run test:ci
-```
-
-## npm scripts
-
-| Script | What it runs |
-|--------|----------------|
-| `npm test` / `npm run test:all` | Full suite (all projects) |
-| `npm run test:ui` | Guest UI (`tests/ui`) |
-| `npm run test:ui:login` | Login form UI only |
-| `npm run test:ui:home` | Home UI only |
-| `npm run test:ui:products` | Products UI only |
-| `npm run test:ui:cart` | Cart UI only |
-| `npm run test:ui:contact` | Contact UI only |
-| `npm run test:ui:signup` | Signup UI only |
-| `npm run test:ui:headed` | Guest UI headed |
-| `npm run test:ui:debug` | Guest UI debug |
-| `npm run test:api` | All API tests |
-| `npm run test:api:auth` | Auth API only |
-| `npm run test:api:products` | Products API only |
-| `npm run test:api:brands` | Brands API only |
-| `npm run test:auth` | Shared-session UI (`authenticatedPage`) |
-| `npm run test:auth:headed` | Auth UI headed |
-| `npm run test:examples` | Multi-user browser/context lesson |
-| `npm run test:ci` | Bootstrap user + full suite (like GitHub Actions) |
-| `npm run test:ci:ui` | Bootstrap + guest UI |
-| `npm run test:ci:api` | Bootstrap + API |
-| `npm run test:ci:auth` | Bootstrap + auth UI |
-| `npm run test:ci:examples` | Bootstrap + examples |
-| `npm run bootstrap` | Create/write `.env` credentials only |
-| `npm run auth:setup` | `apiLogin` → `auth/user.json` |
-| `npm run report` | Open HTML report |
-| `npm run install:browsers` | Install Chromium |
-
-## Adding New Tests
-
-- **Guest UI** → `tests/ui/` + `test.fixtures.js`  
-- **Logged-in UI** → `tests/auth/` + `auth.fixtures.js` (`authenticatedPage`)  
-- **API** → `tests/api/` + `authAPI` / `productsAPI` fixtures  
-- **Multi-user** → `createUserSession(browser, request)` or copy the examples spec  
+Set repository secrets `TEST_EMAIL`, `TEST_PASSWORD`, and `TEST_USER_NAME`. The workflow will not create an account.
