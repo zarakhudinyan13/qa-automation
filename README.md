@@ -50,8 +50,7 @@ page      → one tab inside that context  (= authenticatedPage)
 
 1. `auth.setup.js` → `AuthenticationAPI.apiLogin(EMAIL, PASSWORD)`  
 2. Saves `auth/user.json`  
-3. `chromium-auth` project loads that file as Playwright `storageState`  
-4. Tests use `authenticatedPage` (alias of the already-logged-in `page`)
+3. Auth fixtures open `authenticatedContext` + `authenticatedPage` from that file (a dedicated context, not project-level `storageState`)
 
 Do **not** logout or delete this shared user — that invalidates `sessionid` for parallel tests.
 

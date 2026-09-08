@@ -1,4 +1,5 @@
 import { BasePage } from './BasePage.js';
+import { dismissGoogleVignette } from '../utils/helpers.js';
 
 export class CheckoutPage extends BasePage {
   constructor(page) {
@@ -24,6 +25,9 @@ export class CheckoutPage extends BasePage {
     if (comment) {
       await this.inputElement(this.commentInput, comment);
     }
-    await this.clickElement(this.placeOrderButton);
+    await dismissGoogleVignette(this.page);
+    await this.placeOrderButton.click({ force: true });
+    await dismissGoogleVignette(this.page);
+    await this.page.waitForURL(/\/payment/);
   }
 }

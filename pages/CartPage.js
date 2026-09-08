@@ -1,4 +1,5 @@
 import { BasePage } from './BasePage.js';
+import { dismissGoogleVignette } from '../utils/helpers.js';
 
 export class CartPage extends BasePage {
   constructor(page) {
@@ -29,7 +30,9 @@ export class CartPage extends BasePage {
   }
 
   async proceedToCheckout() {
+    await dismissGoogleVignette(this.page);
     await this.clickElement(this.proceedToCheckoutButton);
+    await dismissGoogleVignette(this.page);
   }
 
   async removeProduct(index = 0) {

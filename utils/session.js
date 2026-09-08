@@ -1,6 +1,7 @@
 import path from 'path';
 import { request as playwrightRequest } from '@playwright/test';
 import { AuthenticationAPI } from '../api/AuthenticationAPI.js';
+import { dismissGoogleVignette } from './helpers.js';
 
 const AUTH_FILE = path.join(__dirname, '../auth/user.json');
 const BASE_URL = process.env.BASE_URL || 'https://automationexercise.com';
@@ -42,6 +43,9 @@ export async function createUserSession(browser, userOverrides = {}) {
   const { user, storageState, createBody, loginResponse } = await authAPI.apiSignup(userOverrides);
   const context = await createAuthenticatedContext(browser, storageState);
   const page = await context.newPage();
+  await page.addLocatorHandler(page.locator('#google_vignette'), async () => {
+    await dismissGoogleVignette(page);
+  });
 
   return {
     user,

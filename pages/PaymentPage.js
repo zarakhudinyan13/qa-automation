@@ -1,16 +1,17 @@
 import { BasePage } from './BasePage.js';
+import { dismissGoogleVignette } from '../utils/helpers.js';
 
 export class PaymentPage extends BasePage {
   constructor(page) {
     super(page);
     this.heading = page.getByRole('heading', { name: 'Payment' });
-    this.nameOnCardInput = page.getByTestId('name-on-card');
-    this.cardNumberInput = page.getByTestId('card-number');
-    this.cvcInput = page.getByTestId('cvc');
-    this.expiryMonthInput = page.getByTestId('expiry-month');
-    this.expiryYearInput = page.getByTestId('expiry-year');
-    this.payButton = page.getByTestId('pay-button');
-    this.orderPlacedHeading = page.getByTestId('order-placed');
+    this.nameOnCardInput = page.locator('[data-qa="name-on-card"], [name="name_on_card"]');
+    this.cardNumberInput = page.locator('[data-qa="card-number"], [name="card_number"]');
+    this.cvcInput = page.locator('[data-qa="cvc"], [name="cvc"]');
+    this.expiryMonthInput = page.locator('[data-qa="expiry-month"], [name="expiry_month"]');
+    this.expiryYearInput = page.locator('[data-qa="expiry-year"], [name="expiry_year"]');
+    this.payButton = page.locator('[data-qa="pay-button"], #submit');
+    this.orderPlacedHeading = page.locator('[data-qa="order-placed"]').or(page.getByText('Order Placed!'));
     this.orderSuccessMessage = page.getByText('Congratulations! Your order has been confirmed!');
   }
 
@@ -25,7 +26,10 @@ export class PaymentPage extends BasePage {
     await this.inputElement(this.cvcInput, cvc);
     await this.inputElement(this.expiryMonthInput, expiryMonth);
     await this.inputElement(this.expiryYearInput, expiryYear);
-    await this.clickElement(this.payButton);
+    await dismissGoogleVignette(this.page);
+    await this.payButton.click({ force: true });
+    await dismissGoogleVignette(this.page);
+    await this.page.waitForURL(/payment_done|\/payment/);
   }
 
   async verifyOrderPlaced() {
