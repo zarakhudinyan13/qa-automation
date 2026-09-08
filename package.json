@@ -4,7 +4,6 @@
   "description": "Playwright tests for automationexercise.com",
   "main": "index.js",
   "scripts": {
-    "bootstrap": "node scripts/ci-bootstrap-user.js",
     "auth:setup": "playwright test --project=setup",
     "test": "playwright test",
     "test:ui": "playwright test --project=chromium",
@@ -12,7 +11,7 @@
     "test:ui:debug": "playwright test --project=chromium --debug",
     "test:auth": "playwright test --project=setup --project=chromium-auth",
     "test:auth:headed": "playwright test --project=setup --project=chromium-auth --headed",
-    "test:ci": "node scripts/ci-bootstrap-user.js && playwright test --workers=2",
+    "test:ci": "playwright test --workers=2",
     "test:headed": "playwright test --headed",
     "test:debug": "playwright test --debug",
     "report": "playwright show-report",

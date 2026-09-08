@@ -10,11 +10,7 @@ npx playwright install chromium
 cp .env.example .env
 ```
 
-Set `EMAIL`, `PASSWORD`, and `USER_NAME` in `.env` for a registered account, or create one:
-
-```bash
-npm run bootstrap
-```
+Set `EMAIL`, `PASSWORD`, and `USER_NAME` in `.env` to a registered account.
 
 ## Run tests
 
@@ -28,4 +24,4 @@ npm run test:auth
 
 ## CI
 
-GitHub Actions bootstraps credentials (uses `TEST_EMAIL` / `TEST_PASSWORD` / `TEST_USER_NAME` if those secrets exist) and runs the suite.
+Set repository secrets `TEST_EMAIL`, `TEST_PASSWORD`, and `TEST_USER_NAME`. The workflow will not create an account.

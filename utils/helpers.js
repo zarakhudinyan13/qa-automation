@@ -5,7 +5,7 @@ export function getEnvCredentials() {
 
   if (!email || !password) {
     throw new Error(
-      'EMAIL and PASSWORD must be set. Copy .env.example to .env, or run: node scripts/ci-bootstrap-user.js',
+      'EMAIL and PASSWORD must be set in .env or the environment',
     );
   }
 
