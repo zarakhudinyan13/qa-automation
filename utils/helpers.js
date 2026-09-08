@@ -1,6 +1,3 @@
-import fs from 'fs';
-import path from 'path';
-
 export function getEnvCredentials() {
   const email = process.env.EMAIL;
   const password = process.env.PASSWORD;
@@ -15,26 +12,10 @@ export function getEnvCredentials() {
   return { email, password, userName: userName || 'Test User' };
 }
 
-export function ensureUploadFixture() {
-  const fixturesDir = path.join(process.cwd(), 'fixtures');
-  const filePath = path.join(fixturesDir, 'sample.txt');
-
-  if (!fs.existsSync(fixturesDir)) {
-    fs.mkdirSync(fixturesDir, { recursive: true });
-  }
-
-  if (!fs.existsSync(filePath)) {
-    fs.writeFileSync(filePath, 'Sample upload file for contact form test.');
-  }
-
-  return filePath;
-}
-
 export async function waitForNetworkIdle(page) {
   await page.waitForLoadState('networkidle');
 }
 
-/** automationexercise.com injects a full-page Google ad that blocks clicks. */
 export async function dismissGoogleVignette(page) {
   await page.evaluate(() => {
     document.getElementById('google_vignette')?.remove();

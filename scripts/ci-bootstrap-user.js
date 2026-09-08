@@ -1,14 +1,3 @@
-/**
- * Ensures EMAIL / PASSWORD / USER_NAME exist for CI and local runs.
- *
- * Priority:
- * 1) Existing env (GitHub secrets or exported vars)
- * 2) Create a fresh account via Automation Exercise API
- *
- * Writes:
- * - .env (picked up by playwright.config.js dotenv)
- * - prints KEY=value lines for `>> $GITHUB_ENV` when used in Actions
- */
 const fs = require('fs');
 const path = require('path');
 
@@ -27,7 +16,6 @@ function writeEnvFile({ email, password, userName }) {
 }
 
 function emitGithubEnv({ email, password, userName }) {
-  // GitHub Actions: append to GITHUB_ENV when present
   const lines = [
     `BASE_URL=${BASE_URL}`,
     `EMAIL=${email}`,
