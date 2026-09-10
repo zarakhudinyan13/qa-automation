@@ -1,3 +1,12 @@
+/**
+ * Shared-session setup (runs before chromium-auth tests).
+ *
+ * 1. Log in the .env user through the API (not the login form).
+ * 2. Write cookies to auth/user.json.
+ * 3. Auth tests open a context from that file (see fixtures/auth.fixtures.js).
+ *
+ * Do not log this user out or delete the account. Other tests reuse sessionid.
+ */
 import { test as setup } from '@playwright/test';
 import { AuthenticationAPI } from '../../api/AuthenticationAPI.js';
 import { getEnvCredentials } from '../../utils/helpers.js';

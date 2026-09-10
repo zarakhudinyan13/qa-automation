@@ -1,3 +1,7 @@
+/**
+ * Guest home tests — context has no cookies.
+ * Isolated auth helpers live in fixtures/auth.fixtures.js; extra auth specs are homework.
+ */
 import { test, expect } from '../../fixtures/test.fixtures.js';
 import { generateUniqueEmail } from '../../utils/dataGenerator.js';
 
