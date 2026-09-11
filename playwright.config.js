@@ -30,15 +30,18 @@ export default defineConfig({
 
   projects: [
     {
+      // API login for the .env user → auth/user.json
       name: 'setup',
       testMatch: /auth\.setup\.js/,
     },
     {
+      // Guest UI: no cookies. Leave tests/ui/home.spec.js as it is.
       name: 'chromium',
       use: { ...devices['Desktop Chrome'] },
       testMatch: /tests\/ui\/.*\.spec\.js/,
     },
     {
+      // Logged-in UI: depends on setup. Specs live in tests/auth/*.spec.js
       name: 'chromium-auth',
       use: { ...devices['Desktop Chrome'] },
       testMatch: /tests\/auth\/.*\.spec\.js/,
