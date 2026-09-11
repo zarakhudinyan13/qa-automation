@@ -1,3 +1,11 @@
+/**
+ * Shared-session setup (runs before chromium-auth tests).
+ *
+ * Logs in the .env user through the API (not the login form) and writes
+ * cookies to auth/user.json. Auth tests then open a context from that file.
+ *
+ * Do not log this user out or delete the account. Other tests reuse sessionid.
+ */
 import { test as setup } from '@playwright/test';
 import { AuthenticationAPI } from '../../api/AuthenticationAPI.js';
 import { getEnvCredentials } from '../../utils/helpers.js';

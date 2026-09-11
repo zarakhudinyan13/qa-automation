@@ -1,3 +1,14 @@
+/**
+ * Session helpers.
+ *
+ * browser  = Chrome
+ * context  = one person's cookies (the session)
+ * page     = one tab
+ *
+ * createAuthenticatedContext — open a context that already has cookies
+ * createUserSession          — API signup + login, own context + page;
+ *                              cleanup() deletes the throwaway account
+ */
 import path from 'path';
 import { request as playwrightRequest } from '@playwright/test';
 import { AuthenticationAPI } from '../api/AuthenticationAPI.js';
@@ -19,6 +30,7 @@ export async function createAuthAPI() {
   return { authAPI, apiContext };
 }
 
+/** New account + own context + page. The freshSession fixture calls cleanup() for you. */
 export async function createUserSession(browser, userOverrides = {}) {
   const { authAPI, apiContext } = await createAuthAPI();
   const { user, storageState, createBody, loginResponse } = await authAPI.apiSignup(userOverrides);

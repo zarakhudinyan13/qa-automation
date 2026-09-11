@@ -1,3 +1,8 @@
+/**
+ * Shared-session tests (authenticatedPage).
+ * Keep the home test. Homework: add one test that opens Products and stays logged in.
+ * Do not click Logout in this file.
+ */
 import { test, expect } from '../../fixtures/auth.fixtures.js';
 import { getEnvCredentials } from '../../utils/helpers.js';
 

@@ -1,3 +1,7 @@
+/**
+ * Guest Home tests — context has no cookies.
+ * Leave these tests as they are. Auth homework is under tests/auth/.
+ */
 import { test, expect } from '../../fixtures/test.fixtures.js';
 import { generateUniqueEmail } from '../../utils/dataGenerator.js';
 
