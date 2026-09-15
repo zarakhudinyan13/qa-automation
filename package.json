@@ -16,6 +16,8 @@
     "test:debug": "playwright test --debug",
     "report": "playwright show-report",
     "install:browsers": "playwright install chromium"
+
+    
   },
   "keywords": [
     "playwright",
