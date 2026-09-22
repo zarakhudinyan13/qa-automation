@@ -7,6 +7,7 @@ import {
   BASE_URL,
   createAuthenticatedContext,
   createUserSession,
+  openTwoSessions,
 } from '../utils/session.js';
 
 export const test = base.extend({
@@ -43,6 +44,19 @@ export const test = base.extend({
       await session.cleanup();
     }
   },
+
+  twoSessions: async ({ browser }, use) => {
+    const sessions = await openTwoSessions(
+      browser,
+      { name: 'Context User A' },
+      { name: 'Context User B' },
+    );
+    try {
+      await use(sessions);
+    } finally {
+      await sessions.close();
+    }
+  },
 });
 
-export { expect, BASE_URL, createUserSession, createAuthenticatedContext, AUTH_FILE };
+export { expect, BASE_URL, createUserSession, createAuthenticatedContext, openTwoSessions, AUTH_FILE };

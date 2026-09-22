@@ -42,8 +42,45 @@ export async function createUserSession(browser, userOverrides = {}) {
       } catch {
         // account may already be gone
       }
-      await apiContext.dispose();
-      await context.close();
+      const closed = await Promise.allSettled([apiContext.dispose(), context.close()]);
+      const failure = closed.find((result) => result.status === 'rejected');
+      if (failure) throw failure.reason;
+    },
+  };
+}
+
+async function cleanupSessions(sessions) {
+  const results = await Promise.allSettled(sessions.map((session) => session.cleanup()));
+  const failure = results.find((result) => result.status === 'rejected');
+  if (failure) throw failure.reason;
+}
+
+/**
+ * One browser, two contexts, two users.
+ * Each call to createUserSession uses its own API context and cookie jar.
+ * close() always cleans up both, including when the test fails.
+ */
+export async function openTwoSessions(browser, overridesA = {}, overridesB = {}) {
+  const created = await Promise.allSettled([
+    createUserSession(browser, overridesA),
+    createUserSession(browser, overridesB),
+  ]);
+  const sessions = created
+    .filter((result) => result.status === 'fulfilled')
+    .map((result) => result.value);
+  const failure = created.find((result) => result.status === 'rejected');
+
+  if (failure) {
+    await cleanupSessions(sessions).catch(() => {});
+    throw failure.reason;
+  }
+
+  const [sessionA, sessionB] = sessions;
+  return {
+    sessionA,
+    sessionB,
+    async close() {
+      await cleanupSessions([sessionA, sessionB]);
     },
   };
 }
