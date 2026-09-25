@@ -41,8 +41,13 @@ export default defineConfig({
     {
       name: 'chromium-auth',
       use: { ...devices['Desktop Chrome'] },
-      testMatch: /tests\/auth\/.*\.spec\.js/,
+      testMatch: /tests\/auth\/(?!two-contexts).*\.spec\.js/,
       dependencies: ['setup'],
+    },
+    {
+      name: 'two-contexts',
+      use: { ...devices['Desktop Chrome'] },
+      testMatch: /two-contexts\.spec\.js/,
     },
   ],
 });

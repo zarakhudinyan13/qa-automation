@@ -1,11 +1,15 @@
+import { randomBytes } from 'crypto';
+
+function uniqueSuffix() {
+  return `${Date.now().toString(36)}${randomBytes(3).toString('hex')}`;
+}
 
 export function generateUniqueEmail(prefix = 'qa.user') {
-  const timestamp = Date.now();
-  return `${prefix}.${timestamp}@automation.test`;
+  return `${prefix}.${uniqueSuffix()}@automation.test`;
 }
 
 export function generateUser(overrides = {}) {
-  const uniqueId = Date.now();
+  const uniqueId = uniqueSuffix();
   return {
     name: `QA User ${uniqueId}`,
     email: generateUniqueEmail(),

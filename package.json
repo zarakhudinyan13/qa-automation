@@ -10,6 +10,7 @@
     "test:ui:headed": "playwright test --project=chromium --headed",
     "test:ui:debug": "playwright test --project=chromium --debug",
     "test:auth": "playwright test --project=setup --project=chromium-auth",
+    "test:examples": "playwright test --project=two-contexts",
     "test:auth:headed": "playwright test --project=setup --project=chromium-auth --headed",
     "test:ci": "playwright test --workers=2",
     "test:headed": "playwright test --headed",
