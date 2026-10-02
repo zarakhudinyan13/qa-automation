@@ -49,5 +49,9 @@ export default defineConfig({
       use: { ...devices['Desktop Chrome'] },
       testMatch: /two-contexts\.spec\.js/,
     },
+    {
+      name: 'mail',
+      testMatch: /tests\/mail\/.*\.spec\.js/,
+    },
   ],
 });
