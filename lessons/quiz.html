@@ -1,0 +1,166 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <title>Final quiz — QA automation framework</title>
+  <style>
+    @page { size: A4; margin: 14mm 16mm; }
+    * { box-sizing: border-box; }
+    body {
+      margin: 0;
+      color: #111;
+      font-family: "Palatino Linotype", Palatino, Georgia, serif;
+      font-size: 11.5pt;
+      line-height: 1.35;
+    }
+    h1 { font-size: 16pt; margin: 0 0 4px; }
+    h2 { font-size: 13pt; margin: 18px 0 8px; page-break-after: avoid; }
+    p { margin: 0 0 8px; }
+    .meta { width: 100%; border-collapse: collapse; margin: 8px 0 12px; }
+    .meta td { border-bottom: 1px solid #111; padding: 6px 8px 4px 0; width: 33%; }
+    .meta span { display: inline-block; min-width: 52px; }
+    ol.questions { margin: 0; padding-left: 22px; }
+    ol.questions > li { margin: 0 0 10px; page-break-inside: avoid; }
+    ul.choices { list-style: none; margin: 4px 0 0; padding: 0; }
+    ul.choices li { margin: 1px 0; }
+    .mark { display: inline-block; width: 1.1em; }
+    .task {
+      border: 1px solid #111;
+      padding: 10px 12px;
+      page-break-inside: avoid;
+    }
+    pre {
+      font-family: "Courier New", Courier, monospace;
+      font-size: 10pt;
+      line-height: 1.35;
+      margin: 8px 0;
+      white-space: pre-wrap;
+    }
+    .lines { margin-top: 8px; }
+    .lines div { border-bottom: 1px solid #bbb; height: 22px; }
+    .foot { margin-top: 12px; font-size: 10pt; }
+  </style>
+</head>
+<body>
+  <h1>Final quiz — QA automation framework</h1>
+  <p>Closed book. One answer per question. Circle the letter. 10 points for the questions, 5 points for the live task. Total 15.</p>
+
+  <table class="meta">
+    <tr>
+      <td><span>Name</span></td>
+      <td><span>Date</span></td>
+      <td><span>Score</span> &nbsp;&nbsp;/ 15</td>
+    </tr>
+  </table>
+
+  <h2>Part A — Selection</h2>
+  <ol class="questions">
+    <li>
+      Guest home specs in <code>tests/ui/home.spec.js</code> import <code>test</code> from which file?
+      <ul class="choices">
+        <li><span class="mark">A</span> <code>fixtures/auth.fixtures.js</code></li>
+        <li><span class="mark">B</span> <code>fixtures/test.fixtures.js</code></li>
+        <li><span class="mark">C</span> <code>@playwright/test</code> only</li>
+        <li><span class="mark">D</span> <code>utils/session.js</code></li>
+      </ul>
+    </li>
+    <li>
+      In a Playwright fixture, code placed after <code>await use(...)</code> runs:
+      <ul class="choices">
+        <li><span class="mark">A</span> Before the test body</li>
+        <li><span class="mark">B</span> After the test finishes, including when the test fails</li>
+        <li><span class="mark">C</span> Only when the test passes</li>
+        <li><span class="mark">D</span> Once per file, before any test</li>
+      </ul>
+    </li>
+    <li>
+      <code>homePage</code> inside <code>fixtures/auth.fixtures.js</code> is built from:
+      <ul class="choices">
+        <li><span class="mark">A</span> The default guest <code>page</code></li>
+        <li><span class="mark">B</span> <code>authenticatedPage</code></li>
+        <li><span class="mark">C</span> A new context with an empty cookie jar</li>
+        <li><span class="mark">D</span> <code>freshSession.page</code></li>
+      </ul>
+    </li>
+    <li>
+      Two <code>page</code> objects opened from the same browser context:
+      <ul class="choices">
+        <li><span class="mark">A</span> Are two different logged-in users</li>
+        <li><span class="mark">B</span> Share cookies, so they are the same session</li>
+        <li><span class="mark">C</span> Each receive a fresh <code>storageState</code></li>
+        <li><span class="mark">D</span> Require two browser processes</li>
+      </ul>
+    </li>
+    <li>
+      <code>openTwoSessions</code> starts the two signups with <code>Promise.allSettled</code> because:
+      <ul class="choices">
+        <li><span class="mark">A</span> <code>Promise.all</code> cannot run two async functions</li>
+        <li><span class="mark">B</span> If one signup fails, the signup that succeeded can still be cleaned up</li>
+        <li><span class="mark">C</span> <code>allSettled</code> cancels the slower request</li>
+        <li><span class="mark">D</span> <code>allSettled</code> hides errors and returns only successes</li>
+      </ul>
+    </li>
+    <li>
+      The example test navigates both home pages with <code>Promise.all</code>. That helper fits when:
+      <ul class="choices">
+        <li><span class="mark">A</span> Every close must finish even if one of them throws</li>
+        <li><span class="mark">B</span> You want the first success and can ignore failures</li>
+        <li><span class="mark">C</span> Both actions should succeed, and you do not need to inspect the other after the first failure</li>
+        <li><span class="mark">D</span> You want whichever of the two finishes first, success or failure</li>
+      </ul>
+    </li>
+    <li>
+      <code>Promise.race</code> is a poor way to wait for a mailbox message because:
+      <ul class="choices">
+        <li><span class="mark">A</span> It waits until every search finishes</li>
+        <li><span class="mark">B</span> It settles on the first result, so an early empty result or a timeout can win before the mail arrives</li>
+        <li><span class="mark">C</span> It marks every message in the inbox as seen</li>
+        <li><span class="mark">D</span> It accepts only two promises</li>
+      </ul>
+    </li>
+    <li>
+      A test that clicks Logout should use <code>freshSession</code> because that fixture:
+      <ul class="choices">
+        <li><span class="mark">A</span> Reuses <code>auth/user.json</code> and is faster</li>
+        <li><span class="mark">B</span> Creates a throwaway user and deletes that account afterwards</li>
+        <li><span class="mark">C</span> Logs in through the login form</li>
+        <li><span class="mark">D</span> Shares cookies with <code>authenticatedPage</code></li>
+      </ul>
+    </li>
+    <li>
+      The <code>chromium-auth</code> project depends on <code>setup</code> so that:
+      <ul class="choices">
+        <li><span class="mark">A</span> Guest home tests receive the shared cookies</li>
+        <li><span class="mark">B</span> <code>auth/user.json</code> exists before the logged-in specs run</li>
+        <li><span class="mark">C</span> The two-context tests read the shared session</li>
+        <li><span class="mark">D</span> IMAP connects before the browser starts</li>
+      </ul>
+    </li>
+    <li>
+      The workflow cron <code>0 8 * * 1</code> means:
+      <ul class="choices">
+        <li><span class="mark">A</span> Every day at 08:00 in the machine’s local time</li>
+        <li><span class="mark">B</span> Monday at 08:00 UTC, and <code>npm run test:ci</code> runs every project</li>
+        <li><span class="mark">C</span> The first day of the month at 08:00</li>
+        <li><span class="mark">D</span> Eight minutes past every hour on Monday</li>
+      </ul>
+    </li>
+  </ol>
+
+  <h2>Part B — Live task (5 points)</h2>
+  <div class="task">
+    <p><code>allSettledOrThrow</code> in <code>utils/promises.js</code> runs every task, waits until all of them settle, and throws the first rejection in task order. Cleanup in <code>utils/session.js</code> already uses it.</p>
+    <p>Write <code>closeBoth</code> so both contexts are closed. If <code>contextA.close()</code> throws, <code>contextB.close()</code> still runs, and the error is still thrown.</p>
+    <p>Do not use <code>Promise.all</code>. Do not <code>await</code> one close and then the other: a throw from the first close would skip the second.</p>
+    <pre>import { allSettledOrThrow } from './promises.js';
+
+export async function closeBoth(contextA, contextB) {</pre>
+    <div class="lines">
+      <div></div><div></div><div></div><div></div><div></div>
+    </div>
+    <pre>}</pre>
+  </div>
+
+  <p class="foot">Open book is not allowed. You may not run the suite during Part A. For Part B, write the function on this page.</p>
+</body>
+</html>

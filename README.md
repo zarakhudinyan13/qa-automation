@@ -37,6 +37,19 @@ One browser, two contexts, two users. Each context has its own cookies.
 npm run test:examples
 ```
 
+## Final lesson
+
+[Advanced suite practices](lessons/final-advanced.md): two contexts, IMAP mailbox rules, and the Monday full run.
+
+Printable quiz (student sheet): [lessons/quiz.html](lessons/quiz.html). Instructor key: [lessons/quiz-answer-key.html](lessons/quiz-answer-key.html).
+
+```bash
+npm run test:ci    # every project
+npm run test:mail  # mailbox checks; skipped without IMAP secrets
+```
+
 ## CI
 
 Set repository secrets `TEST_EMAIL`, `TEST_PASSWORD`, and `TEST_USER_NAME`. The workflow will not create an account.
+
+The same job runs on push, on pull request, and every Monday at 08:00 UTC. It runs every Playwright project (`npm run test:ci`). Optional mailbox secrets are `IMAP_HOST`, `IMAP_USER`, `IMAP_PASSWORD`, `IMAP_PORT`, and `IMAP_MAILBOX`.

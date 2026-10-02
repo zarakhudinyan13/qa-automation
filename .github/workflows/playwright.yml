@@ -5,6 +5,10 @@ on:
     branches: [main, master]
   pull_request:
     branches: [main, master]
+  schedule:
+    # Monday 08:00 UTC. GitHub runs scheduled workflows from the default branch only.
+    - cron: '0 8 * * 1'
+  workflow_dispatch:
 
 jobs:
   test:
@@ -16,6 +20,11 @@ jobs:
       EMAIL: ${{ secrets.TEST_EMAIL }}
       PASSWORD: ${{ secrets.TEST_PASSWORD }}
       USER_NAME: ${{ secrets.TEST_USER_NAME }}
+      IMAP_HOST: ${{ secrets.IMAP_HOST }}
+      IMAP_PORT: ${{ secrets.IMAP_PORT }}
+      IMAP_USER: ${{ secrets.IMAP_USER }}
+      IMAP_PASSWORD: ${{ secrets.IMAP_PASSWORD }}
+      IMAP_MAILBOX: ${{ secrets.IMAP_MAILBOX }}
       CI: true
 
     steps:
@@ -31,8 +40,8 @@ jobs:
       - name: Install Playwright Browsers
         run: npx playwright install --with-deps chromium
 
-      - name: Run Playwright tests
-        run: npx playwright test --workers=2
+      - name: Run all Playwright projects
+        run: npm run test:ci
 
       - uses: actions/upload-artifact@v4
         if: always()

@@ -1,0 +1,61 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <title>Final quiz — answer key</title>
+  <style>
+    @page { size: A4; margin: 14mm 16mm; }
+    body {
+      margin: 0;
+      color: #111;
+      font-family: "Palatino Linotype", Palatino, Georgia, serif;
+      font-size: 11.5pt;
+      line-height: 1.4;
+    }
+    h1 { font-size: 16pt; margin: 0 0 6px; }
+    h2 { font-size: 13pt; margin: 16px 0 6px; }
+    p, li { margin: 0 0 6px; }
+    ol { padding-left: 22px; }
+    pre {
+      font-family: "Courier New", Courier, monospace;
+      font-size: 10.5pt;
+      line-height: 1.35;
+      white-space: pre-wrap;
+    }
+    .banner { border: 1px solid #111; padding: 6px 10px; margin-bottom: 12px; }
+  </style>
+</head>
+<body>
+  <div class="banner">Instructor copy. Do not hand this sheet out with the quiz.</div>
+  <h1>Final quiz — answer key</h1>
+  <p>Part A is 1 point each. Part B is 5 points. Total 15.</p>
+
+  <h2>Part A</h2>
+  <ol>
+    <li><strong>B.</strong> <code>tests/ui/home.spec.js</code> imports <code>fixtures/test.fixtures.js</code>. That fixture builds <code>homePage</code> from the guest <code>page</code>.</li>
+    <li><strong>B.</strong> <code>use</code> runs the test. Code after it is teardown. <code>freshSession</code> and <code>twoSessions</code> call cleanup there, so it still runs when the test fails.</li>
+    <li><strong>B.</strong> In <code>fixtures/auth.fixtures.js</code>, <code>homePage</code> and <code>header</code> are bound to <code>authenticatedPage</code>, which already has the shared cookies.</li>
+    <li><strong>B.</strong> A context is the cookie jar. Two pages in one context are two tabs of one user. A second user needs a second context (<code>openTwoSessions</code>).</li>
+    <li><strong>B.</strong> <code>Promise.allSettled</code> waits for both signups. The helper then deletes any account that was created and still throws the signup error. <code>Promise.all</code> would reject on the first failure and make that cleanup harder to see. It does not cancel the other signup, and it does not hide the error: this code rethrows <code>failure.reason</code>.</li>
+    <li><strong>C.</strong> Both home pages should load. <code>Promise.all</code> rejects when either navigation rejects. A is <code>Promise.allSettled</code> / <code>allSettledOrThrow</code>. B is <code>Promise.any</code>. D is <code>Promise.race</code>.</li>
+    <li><strong>B.</strong> <code>Promise.race</code> settles as soon as one promise settles. Mail has to be polled until a deadline (<code>waitForUnseen</code>), not abandoned because an empty search finished first.</li>
+    <li><strong>B.</strong> Logout would destroy the shared <code>sessionid</code> in <code>auth/user.json</code>. <code>freshSession</code> signs up a new user and <code>cleanup()</code> deletes that account.</li>
+    <li><strong>B.</strong> <code>setup</code> writes <code>auth/user.json</code>. <code>chromium-auth</code> depends on that project. Guest tests and <code>two-contexts</code> do not.</li>
+    <li><strong>B.</strong> GitHub cron is UTC. <code>0 8 * * 1</code> is Monday 08:00 UTC. <code>npm run test:ci</code> is <code>playwright test --workers=2</code>, so every project in <code>playwright.config.js</code> runs.</li>
+  </ol>
+
+  <h2>Part B — 5 points</h2>
+  <p>Full marks: both closes are passed to <code>allSettledOrThrow</code> as tasks, and the call is awaited.</p>
+  <pre>import { allSettledOrThrow } from './promises.js';
+
+export async function closeBoth(contextA, contextB) {
+  await allSettledOrThrow([
+    () => contextA.close(),
+    () => contextB.close(),
+  ]);
+}</pre>
+  <p>2 points if they call <code>allSettledOrThrow</code> but forget <code>await</code>, or pass promises that have already started in a way that still waits for both.</p>
+  <p>0 points for <code>await contextA.close(); await contextB.close();</code> or for <code>Promise.all</code>. The first throw skips the second close. <code>Promise.all</code> rejects on the first failure and does not by itself guarantee the caller observes the second close.</p>
+  <p>Same shape as <code>cleanup()</code> in <code>utils/session.js</code>, which disposes the API context and closes the browser context through <code>allSettledOrThrow</code>.</p>
+</body>
+</html>

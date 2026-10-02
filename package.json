@@ -11,14 +11,13 @@
     "test:ui:debug": "playwright test --project=chromium --debug",
     "test:auth": "playwright test --project=setup --project=chromium-auth",
     "test:examples": "playwright test --project=two-contexts",
+    "test:mail": "playwright test --project=mail",
     "test:auth:headed": "playwright test --project=setup --project=chromium-auth --headed",
     "test:ci": "playwright test --workers=2",
     "test:headed": "playwright test --headed",
     "test:debug": "playwright test --debug",
     "report": "playwright show-report",
     "install:browsers": "playwright install chromium"
-
-    
   },
   "keywords": [
     "playwright",
@@ -30,7 +29,8 @@
   "type": "commonjs",
   "devDependencies": {
     "@playwright/test": "^1.62.1",
-    "@types/node": "^26.1.2"
+    "@types/node": "^26.1.2",
+    "imapflow": "^2.2.1"
   },
   "dependencies": {
     "dotenv": "^17.4.2"
