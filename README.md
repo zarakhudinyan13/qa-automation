@@ -41,6 +41,8 @@ npm run test:examples
 
 [Advanced suite practices](lessons/final-advanced.md): two contexts, IMAP mailbox rules, and the Monday full run.
 
+Printable quiz (student sheet): [lessons/quiz.html](lessons/quiz.html). Instructor key: [lessons/quiz-answer-key.html](lessons/quiz-answer-key.html).
+
 ```bash
 npm run test:ci    # every project
 npm run test:mail  # mailbox checks; skipped without IMAP secrets

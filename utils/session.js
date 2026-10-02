@@ -2,6 +2,7 @@ import path from 'path';
 import { request as playwrightRequest } from '@playwright/test';
 import { AuthenticationAPI } from '../api/AuthenticationAPI.js';
 import { dismissGoogleVignette } from './helpers.js';
+import { allSettledOrThrow } from './promises.js';
 
 const AUTH_FILE = path.join(__dirname, '../auth/user.json');
 const BASE_URL = process.env.BASE_URL || 'https://automationexercise.com';
@@ -42,17 +43,16 @@ export async function createUserSession(browser, userOverrides = {}) {
       } catch {
         // account may already be gone
       }
-      const closed = await Promise.allSettled([apiContext.dispose(), context.close()]);
-      const failure = closed.find((result) => result.status === 'rejected');
-      if (failure) throw failure.reason;
+      await allSettledOrThrow([
+        () => apiContext.dispose(),
+        () => context.close(),
+      ]);
     },
   };
 }
 
 async function cleanupSessions(sessions) {
-  const results = await Promise.allSettled(sessions.map((session) => session.cleanup()));
-  const failure = results.find((result) => result.status === 'rejected');
-  if (failure) throw failure.reason;
+  await allSettledOrThrow(sessions.map((session) => () => session.cleanup()));
 }
 
 /**

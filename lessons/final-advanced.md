@@ -18,6 +18,8 @@ Guest home tests, the shared login, and two browser contexts are already in the 
 
 Say this plainly: two pages inside one context are still one login. A second user is a second context.
 
+Closing those contexts uses `allSettledOrThrow` in `utils/promises.js`. Every cleanup task runs. If one rejects, the first error is thrown only after the others have settled. `Promise.all` is for the case where both actions should succeed, such as opening the two home pages together.
+
 The `two-contexts` project does not depend on `setup`. It must not read `auth/user.json`. That file is the shared account.
 
 ## 2. IMAP
@@ -63,6 +65,7 @@ GitHub schedules are UTC. The workflow cron is `0 8 * * 1`: Monday at 08:00 UTC.
 | `chromium-auth` | Logged-in specs. Starts `setup` first. |
 | `two-contexts` | Two users, two contexts. Does not use the shared cookies. |
 | `mail` | Mailbox open/close when IMAP secrets exist. Otherwise skipped. |
+| `unit` | `allSettledOrThrow` in `utils/promises.js`. No browser. |
 
 Push and pull request runs use the same job. The Monday run needs the same repository secrets: `TEST_EMAIL`, `TEST_PASSWORD`, `TEST_USER_NAME`. Add `IMAP_HOST`, `IMAP_USER`, `IMAP_PASSWORD`, and optionally `IMAP_PORT` and `IMAP_MAILBOX`, only if the mailbox check should connect.
 

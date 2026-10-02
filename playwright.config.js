@@ -53,5 +53,9 @@ export default defineConfig({
       name: 'mail',
       testMatch: /tests\/mail\/.*\.spec\.js/,
     },
+    {
+      name: 'unit',
+      testMatch: /tests\/utils\/.*\.spec\.js/,
+    },
   ],
 });
