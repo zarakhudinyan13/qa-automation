@@ -41,9 +41,15 @@ npm run test:examples
 
 [Advanced suite practices](lessons/final-advanced.md): two contexts, IMAP mailbox rules, and the Monday full run.
 
-Printable quiz (student sheet): [lessons/quiz.html](lessons/quiz.html). Instructor key: [lessons/quiz-answer-key.html](lessons/quiz-answer-key.html).
+Printable quiz: `lessons/quiz.html`. Instructor key: `lessons/quiz-answer-key.html`.
 
-Exam to send: [lessons/exam.html](lessons/exam.html) (15 selection questions and one short task). Instructor key, not for students: [lessons/exam-answer-key.html](lessons/exam-answer-key.html).
+Open the exam in Google Chrome (not the editor preview):
+
+```bash
+npm run exam
+```
+
+The sheet is `lessons/exam.html` (15 selection questions and one short task). The instructor key is `lessons/exam-answer-key.html`. Do not send the key.
 
 ```bash
 npm run test:ci    # every project
