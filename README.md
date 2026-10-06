@@ -6,7 +6,7 @@ Playwright tests for [Automation Exercise](https://automationexercise.com).
 
 ```bash
 npm install
-npx playwright install chromium
+npx playwright install chrome
 cp .env.example .env
 ```
 

@@ -20,6 +20,7 @@ export default defineConfig({
   use: {
     baseURL: process.env.BASE_URL || 'https://automationexercise.com',
     testIdAttribute: 'data-qa',
+    channel: 'chrome',
     headless: true,
     trace: 'on-first-retry',
     screenshot: 'only-on-failure',
@@ -35,18 +36,18 @@ export default defineConfig({
     },
     {
       name: 'chromium',
-      use: { ...devices['Desktop Chrome'] },
+      use: { ...devices['Desktop Chrome'], channel: 'chrome' },
       testMatch: /tests\/ui\/.*\.spec\.js/,
     },
     {
       name: 'chromium-auth',
-      use: { ...devices['Desktop Chrome'] },
+      use: { ...devices['Desktop Chrome'], channel: 'chrome' },
       testMatch: /tests\/auth\/(?!two-contexts).*\.spec\.js/,
       dependencies: ['setup'],
     },
     {
       name: 'two-contexts',
-      use: { ...devices['Desktop Chrome'] },
+      use: { ...devices['Desktop Chrome'], channel: 'chrome' },
       testMatch: /two-contexts\.spec\.js/,
     },
     {
