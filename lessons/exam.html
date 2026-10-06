@@ -1,0 +1,201 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <title>Exam — QA automation framework</title>
+  <style>
+    @page { size: A4; margin: 12mm 14mm; }
+    * { box-sizing: border-box; }
+    body {
+      margin: 0;
+      color: #111;
+      font-family: "Palatino Linotype", Palatino, Georgia, serif;
+      font-size: 11pt;
+      line-height: 1.32;
+    }
+    h1 { font-size: 15.5pt; margin: 0 0 2px; }
+    h2 { font-size: 12.5pt; margin: 12px 0 6px; page-break-after: avoid; }
+    p { margin: 0 0 6px; }
+    .meta { width: 100%; border-collapse: collapse; margin: 6px 0 8px; }
+    .meta td { border-bottom: 1px solid #111; padding: 5px 8px 3px 0; }
+    ol.questions { margin: 0; padding-left: 20px; }
+    ol.questions > li { margin: 0 0 7px; page-break-inside: avoid; }
+    ul.choices { list-style: none; margin: 2px 0 0; padding: 0; }
+    ul.choices li { margin: 0; }
+    .mark { display: inline-block; width: 1.15em; }
+    .task { border: 1px solid #111; padding: 8px 10px; page-break-inside: avoid; }
+    pre {
+      font-family: "Courier New", Courier, monospace;
+      font-size: 9.5pt;
+      line-height: 1.3;
+      margin: 6px 0;
+      white-space: pre-wrap;
+    }
+    .lines div { border-bottom: 1px solid #bbb; height: 20px; }
+    code { font-family: "Courier New", Courier, monospace; font-size: 0.95em; }
+  </style>
+</head>
+<body>
+  <h1>Exam — QA automation framework</h1>
+  <p>Closed book. Circle one letter. Part A is 15 points. Part B is 5 points. Total 20. Time: 40 minutes.</p>
+  <table class="meta">
+    <tr>
+      <td>Name</td>
+      <td>Date</td>
+      <td>Score &nbsp;&nbsp;/ 20</td>
+    </tr>
+  </table>
+
+  <h2>Part A — Selection</h2>
+  <ol class="questions">
+    <li>
+      Guest tests in <code>tests/ui/home.spec.js</code> import <code>test</code> from:
+      <ul class="choices">
+        <li><span class="mark">A</span> <code>fixtures/auth.fixtures.js</code></li>
+        <li><span class="mark">B</span> <code>fixtures/test.fixtures.js</code></li>
+        <li><span class="mark">C</span> <code>@playwright/test</code> only</li>
+        <li><span class="mark">D</span> <code>utils/session.js</code></li>
+      </ul>
+    </li>
+    <li>
+      Code after <code>await use(...)</code> in a fixture runs:
+      <ul class="choices">
+        <li><span class="mark">A</span> Before the test body</li>
+        <li><span class="mark">B</span> After the test, including when the test fails</li>
+        <li><span class="mark">C</span> Only when the test passes</li>
+        <li><span class="mark">D</span> Once per file, before any test</li>
+      </ul>
+    </li>
+    <li>
+      <code>homePage</code> in <code>fixtures/auth.fixtures.js</code> is built from:
+      <ul class="choices">
+        <li><span class="mark">A</span> The default guest <code>page</code></li>
+        <li><span class="mark">B</span> <code>authenticatedPage</code></li>
+        <li><span class="mark">C</span> A context with an empty cookie jar</li>
+        <li><span class="mark">D</span> <code>freshSession.page</code></li>
+      </ul>
+    </li>
+    <li>
+      Two pages opened from the same browser context:
+      <ul class="choices">
+        <li><span class="mark">A</span> Are two different logged-in users</li>
+        <li><span class="mark">B</span> Share cookies, so they are one session</li>
+        <li><span class="mark">C</span> Each get a new <code>storageState</code></li>
+        <li><span class="mark">D</span> Require two browser processes</li>
+      </ul>
+    </li>
+    <li>
+      <code>openTwoSessions</code> starts both signups with <code>Promise.allSettled</code> because:
+      <ul class="choices">
+        <li><span class="mark">A</span> <code>Promise.all</code> cannot start two async functions</li>
+        <li><span class="mark">B</span> If one signup fails, the one that succeeded can still be cleaned up</li>
+        <li><span class="mark">C</span> <code>allSettled</code> cancels the slower signup</li>
+        <li><span class="mark">D</span> <code>allSettled</code> hides the error</li>
+      </ul>
+    </li>
+    <li>
+      Both home pages are opened with <code>Promise.all</code>. That fits when:
+      <ul class="choices">
+        <li><span class="mark">A</span> Every cleanup must finish even if one throws</li>
+        <li><span class="mark">B</span> The first success is enough and failures can be ignored</li>
+        <li><span class="mark">C</span> Both actions should succeed</li>
+        <li><span class="mark">D</span> You want whichever call finishes first</li>
+      </ul>
+    </li>
+    <li>
+      Which helper fulfills on the first success and ignores earlier rejections, unless every task rejects?
+      <ul class="choices">
+        <li><span class="mark">A</span> <code>Promise.all</code></li>
+        <li><span class="mark">B</span> <code>Promise.allSettled</code></li>
+        <li><span class="mark">C</span> <code>Promise.race</code></li>
+        <li><span class="mark">D</span> <code>Promise.any</code></li>
+      </ul>
+    </li>
+    <li>
+      <code>Promise.race</code> is a poor way to wait for mail because it:
+      <ul class="choices">
+        <li><span class="mark">A</span> Waits for every search to finish</li>
+        <li><span class="mark">B</span> Settles on the first result, so an empty search can win before the message arrives</li>
+        <li><span class="mark">C</span> Marks the whole inbox as seen</li>
+        <li><span class="mark">D</span> Accepts only two promises</li>
+      </ul>
+    </li>
+    <li>
+      A test that clicks Logout uses <code>freshSession</code> because it:
+      <ul class="choices">
+        <li><span class="mark">A</span> Reuses <code>auth/user.json</code></li>
+        <li><span class="mark">B</span> Creates a throwaway user and deletes that account afterwards</li>
+        <li><span class="mark">C</span> Types into the login form</li>
+        <li><span class="mark">D</span> Shares cookies with <code>authenticatedPage</code></li>
+      </ul>
+    </li>
+    <li>
+      <code>chromium-auth</code> depends on the <code>setup</code> project so that:
+      <ul class="choices">
+        <li><span class="mark">A</span> Guest home tests receive the shared cookies</li>
+        <li><span class="mark">B</span> <code>auth/user.json</code> exists before logged-in specs run</li>
+        <li><span class="mark">C</span> Two-context tests load the shared session</li>
+        <li><span class="mark">D</span> The mailbox connects before the browser starts</li>
+      </ul>
+    </li>
+    <li>
+      The <code>two-contexts</code> project does not depend on <code>setup</code> because:
+      <ul class="choices">
+        <li><span class="mark">A</span> It must not load the shared account from <code>auth/user.json</code></li>
+        <li><span class="mark">B</span> A second context cannot be opened after setup</li>
+        <li><span class="mark">C</span> Setup deletes every user on the site</li>
+        <li><span class="mark">D</span> Those tests log in through the login form</li>
+      </ul>
+    </li>
+    <li>
+      <code>generateUniqueEmail</code> adds random bytes as well as the time because:
+      <ul class="choices">
+        <li><span class="mark">A</span> The site rejects emails that contain only digits</li>
+        <li><span class="mark">B</span> Two signups in the same millisecond must not share an address</li>
+        <li><span class="mark">C</span> IMAP allows only 16-character local parts</li>
+        <li><span class="mark">D</span> Playwright requires a unique domain</li>
+      </ul>
+    </li>
+    <li>
+      With no <code>IMAP_HOST</code>, <code>IMAP_USER</code>, or <code>IMAP_PASSWORD</code>, the mail project:
+      <ul class="choices">
+        <li><span class="mark">A</span> Fails the Monday job</li>
+        <li><span class="mark">B</span> Is dropped from <code>npm run test:ci</code></li>
+        <li><span class="mark">C</span> Skips the live mailbox check, and the rest of the suite can still pass</li>
+        <li><span class="mark">D</span> Logs the mailbox password and continues</li>
+      </ul>
+    </li>
+    <li>
+      Which <code>playwright.config.js</code> pair matches this project?
+      <ul class="choices">
+        <li><span class="mark">A</span> <code>trace: 'on'</code>, <code>screenshot: 'on'</code></li>
+        <li><span class="mark">B</span> <code>trace: 'on-first-retry'</code>, <code>screenshot: 'only-on-failure'</code></li>
+        <li><span class="mark">C</span> <code>trace: 'off'</code>, <code>screenshot: 'on'</code></li>
+        <li><span class="mark">D</span> <code>trace: 'retain-on-failure'</code>, <code>screenshot: 'on-first-retry'</code></li>
+      </ul>
+    </li>
+    <li>
+      The workflow cron <code>0 8 * * 1</code> means:
+      <ul class="choices">
+        <li><span class="mark">A</span> Every day at 08:00 local time</li>
+        <li><span class="mark">B</span> Monday at 08:00 UTC, and <code>npm run test:ci</code> runs every project</li>
+        <li><span class="mark">C</span> The first day of the month at 08:00</li>
+        <li><span class="mark">D</span> Eight minutes past every hour on Monday</li>
+      </ul>
+    </li>
+  </ol>
+
+  <h2>Part B — Short task (5 points)</h2>
+  <div class="task">
+    <p><code>allSettledOrThrow</code> in <code>utils/promises.js</code> runs every task, waits until all of them settle, then throws the first rejection in task order. Session cleanup already uses it.</p>
+    <p>Write <code>closeBoth</code>. If <code>contextA.close()</code> throws, <code>contextB.close()</code> still runs, and the error is still thrown. Do not use <code>Promise.all</code>. Do not await one close and then the other.</p>
+    <pre>import { allSettledOrThrow } from './promises.js';
+
+export async function closeBoth(contextA, contextB) {</pre>
+    <div class="lines">
+      <div></div><div></div><div></div><div></div><div></div>
+    </div>
+    <pre>}</pre>
+  </div>
+</body>
+</html>

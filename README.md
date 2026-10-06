@@ -43,6 +43,8 @@ npm run test:examples
 
 Printable quiz (student sheet): [lessons/quiz.html](lessons/quiz.html). Instructor key: [lessons/quiz-answer-key.html](lessons/quiz-answer-key.html).
 
+Exam to send: [lessons/exam.html](lessons/exam.html) (15 selection questions and one short task). Instructor key, not for students: [lessons/exam-answer-key.html](lessons/exam-answer-key.html).
+
 ```bash
 npm run test:ci    # every project
 npm run test:mail  # mailbox checks; skipped without IMAP secrets

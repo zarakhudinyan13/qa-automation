@@ -1,0 +1,60 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <title>Exam answer key — do not send</title>
+  <style>
+    @page { size: A4; margin: 14mm 16mm; }
+    body {
+      margin: 0;
+      color: #111;
+      font-family: "Palatino Linotype", Palatino, Georgia, serif;
+      font-size: 11.5pt;
+      line-height: 1.38;
+    }
+    h1 { font-size: 16pt; margin: 0 0 6px; }
+    h2 { font-size: 13pt; margin: 14px 0 6px; }
+    p, li { margin: 0 0 6px; }
+    ol { padding-left: 22px; }
+    pre {
+      font-family: "Courier New", Courier, monospace;
+      font-size: 10.5pt;
+      white-space: pre-wrap;
+    }
+    .banner { border: 1px solid #111; padding: 6px 10px; margin-bottom: 12px; }
+    code { font-family: "Courier New", Courier, monospace; font-size: 0.95em; }
+  </style>
+</head>
+<body>
+  <div class="banner">Instructor copy. Send <code>lessons/exam.html</code> only.</div>
+  <h1>Exam answer key</h1>
+  <p>Part A is 1 point each (15). Part B is 5 points. Total 20.</p>
+  <ol>
+    <li><strong>B.</strong> <code>tests/ui/home.spec.js</code> imports <code>fixtures/test.fixtures.js</code>.</li>
+    <li><strong>B.</strong> Teardown sits after <code>use</code>. <code>freshSession</code> and <code>twoSessions</code> clean up there, including on failure.</li>
+    <li><strong>B.</strong> Auth <code>homePage</code> and <code>header</code> use <code>authenticatedPage</code>.</li>
+    <li><strong>B.</strong> The context holds the cookies. A second user is a second context.</li>
+    <li><strong>B.</strong> Both signups are observed. A created account is still deleted, then the signup error is rethrown.</li>
+    <li><strong>C.</strong> Both navigations should succeed. Cleanup that must survive a throw is <code>allSettledOrThrow</code>, not <code>Promise.all</code>.</li>
+    <li><strong>D.</strong> <code>Promise.any</code> fulfills on the first success. <code>Promise.race</code> settles on the first result of either kind.</li>
+    <li><strong>B.</strong> Mail is polled until a deadline in <code>waitForUnseen</code>. A race can finish on an empty search.</li>
+    <li><strong>B.</strong> Logout must not destroy the shared <code>sessionid</code>. <code>freshSession</code> deletes only the throwaway account.</li>
+    <li><strong>B.</strong> <code>tests/auth/auth.setup.js</code> writes <code>auth/user.json</code> through the API. <code>chromium-auth</code> depends on that project.</li>
+    <li><strong>A.</strong> <code>two-contexts</code> builds its own users. It must not read the shared cookie file.</li>
+    <li><strong>B.</strong> <code>uniqueSuffix()</code> is the time plus random bytes so parallel signups do not collide.</li>
+    <li><strong>C.</strong> <code>imapConfigured()</code> is false without those three values. The live check is skipped.</li>
+    <li><strong>B.</strong> <code>trace: 'on-first-retry'</code> and <code>screenshot: 'only-on-failure'</code>. Video is <code>retain-on-failure</code>.</li>
+    <li><strong>B.</strong> GitHub cron is UTC. <code>npm run test:ci</code> runs every project in <code>playwright.config.js</code>.</li>
+  </ol>
+  <h2>Part B</h2>
+  <pre>import { allSettledOrThrow } from './promises.js';
+
+export async function closeBoth(contextA, contextB) {
+  await allSettledOrThrow([
+    () => contextA.close(),
+    () => contextB.close(),
+  ]);
+}</pre>
+  <p>Full marks only when both closes are tasks passed to <code>allSettledOrThrow</code> and the call is awaited. No marks for <code>Promise.all</code> or for two separate <code>await</code>s: the first throw would skip the second close.</p>
+</body>
+</html>
