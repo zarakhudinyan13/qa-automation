@@ -43,13 +43,9 @@ npm run test:examples
 
 Printable quiz: `lessons/quiz.html`. Instructor key: `lessons/quiz-answer-key.html`.
 
-Open the exam in Google Chrome (not the editor preview):
+Student exam file to send: `lessons/QA-automation-exam.pdf` (3 pages, 15 selection questions, one short task, no answers).
 
-```bash
-npm run exam
-```
-
-The sheet is `lessons/exam.html` (15 selection questions and one short task). The instructor key is `lessons/exam-answer-key.html`. Do not send the key.
+Do not send `lessons/exam.html` or a GitHub link to this repository. GitHub shows the HTML as source code, and the instructor key is in the same public repo. Download the PDF and attach it, or upload only that PDF to Drive. The instructor key is `lessons/exam-answer-key.html`.
 
 ```bash
 npm run test:ci    # every project
