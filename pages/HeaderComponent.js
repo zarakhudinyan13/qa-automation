@@ -3,14 +3,15 @@ import { BasePage } from './BasePage.js';
 export class HeaderComponent extends BasePage {
   constructor(page) {
     super(page);
-    this.homeLink = page.locator('#header').getByRole('link', { name: 'Home' });
-    this.productsLink = page.getByRole('link', { name: 'Products' });
-    this.cartLink = page.getByRole('link', { name: 'Cart' });
-    this.signupLoginLink = page.getByRole('link', { name: 'Signup / Login' });
-    this.testCasesLink = page.getByRole('link', { name: 'Test Cases' });
-    this.contactUsLink = page.getByRole('link', { name: 'Contact us' });
-    this.logoutLink = page.getByRole('link', { name: 'Logout' });
-    this.deleteAccountLink = page.getByRole('link', { name: 'Delete Account' });
+    const header = page.locator('#header');
+    this.homeLink = header.getByRole('link', { name: 'Home' });
+    this.productsLink = header.getByRole('link', { name: 'Products' });
+    this.cartLink = header.getByRole('link', { name: 'Cart' });
+    this.signupLoginLink = header.getByRole('link', { name: 'Signup / Login' });
+    this.testCasesLink = header.getByRole('link', { name: 'Test Cases' });
+    this.contactUsLink = header.getByRole('link', { name: 'Contact us' });
+    this.logoutLink = header.getByRole('link', { name: 'Logout' });
+    this.deleteAccountLink = header.getByRole('link', { name: 'Delete Account' });
   }
 
   loggedInAs(name) {
